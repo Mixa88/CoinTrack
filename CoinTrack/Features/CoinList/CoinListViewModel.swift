@@ -5,7 +5,7 @@
 //  Created by Михайло Тихонов on 06.11.2025.
 //
 
-// CoinListViewModel.swift
+
 import Foundation
 
 // 1. @MainActor ensures that all updates to our @Published

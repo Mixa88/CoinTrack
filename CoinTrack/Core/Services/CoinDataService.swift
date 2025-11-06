@@ -5,7 +5,7 @@
 //  Created by Михайло Тихонов on 06.11.2025.
 //
 
-// CoinDataService.swift
+
 import Foundation
 
 // This service is a "Singleton" - a single instance that the whole app can share.
