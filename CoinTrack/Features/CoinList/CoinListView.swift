@@ -26,6 +26,9 @@ struct CoinListView: View {
                         .listRowBackground(Color.clear) // Transparent background
                 }
                 .listStyle(.plain)
+                .refreshable {
+                                await viewModel.refreshCoins() // Call our new function
+                            }
                 
                 // 4. Show a loading spinner *only* when isLoading is true
                 if viewModel.isLoading {
@@ -44,6 +47,8 @@ struct CoinListView: View {
                 }
             }
             .navigationTitle("Live Prices") // TODO: We can localize this later
+            .searchable(text: $viewModel.searchText,
+                        prompt: "Search by name or symbol...") // TODO: Localize
         }
     }
 }
