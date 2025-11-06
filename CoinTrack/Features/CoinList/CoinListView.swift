@@ -21,7 +21,9 @@ struct CoinListView: View {
                 
                 // 3. The main list of coins
                 List(viewModel.coins) { coin in
-                    CoinRowView(coin: coin) // <-- Our "cozy" row!
+                    NavigationLink(destination: CoinDetailView(coin: coin)) {
+                                        CoinRowView(coin: coin) 
+                                    }
                         .listRowSeparator(.hidden) // Makes it cleaner
                         .listRowBackground(Color.clear) // Transparent background
                 }

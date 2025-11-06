@@ -78,32 +78,11 @@ extension Double {
     }
 }
 
-// --- 6. A Preview to see our work! ---
+// CoinRowView.swift
 #Preview {
-    // Create a "mock" (fake) coin to build our UI
-    let mockCoin = Coin(
-        id: "bitcoin",
-        symbol: "btc",
-        name: "Bitcoin",
-        image: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
-        currentPrice: 65123,
-        priceChangePercentage24H: 1.25
-    )
-    
-    // A second mock coin to see the "red" color
-    let mockCoin2 = Coin(
-        id: "ethereum",
-        symbol: "eth",
-        name: "Ethereum",
-        image: "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501638",
-        currentPrice: 3456,
-        priceChangePercentage24H: -0.5
-    )
-    
-    // Show both in a VStack for testing
     VStack(spacing: 20) {
-        CoinRowView(coin: mockCoin)
-        CoinRowView(coin: mockCoin2)
+        CoinRowView(coin: Coin.mock)
+        CoinRowView(coin: Coin.mock2)
     }
     .padding()
 }
