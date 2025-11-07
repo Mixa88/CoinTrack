@@ -57,26 +57,7 @@ struct CoinRowView: View {
     }
 }
 
-// --- 5. A small extension to format our numbers nicely ---
-// We can move this to a new file in `Core/Extensions` later.
-extension Double {
-    
-    /// Converts a Double into a Currency String with 2 decimal places.
-    /// ```
-    /// Example: 1234.56 -> "$1,234.56"
-    /// ```
-    func toCurrencyString() -> String {
-        return self.formatted(.currency(code: "usd").precision(.fractionLength(2)))
-    }
-    
-    /// Converts a Double into a Percent String with 2 decimal places.
-    /// ```
-    /// Example: 1.23 -> "1.23%"
-    /// ```
-    func toPercentString() -> String {
-        return (self / 100.0).formatted(.percent.precision(.fractionLength(2)))
-    }
-}
+
 
 // CoinRowView.swift
 #Preview {

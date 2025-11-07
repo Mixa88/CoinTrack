@@ -5,12 +5,9 @@
 //  Created by Михайло Тихонов on 06.11.2025.
 //
 
-
-
-
 import Foundation
 import Combine
-import SwiftData
+import SwiftData // 1. IMPORT
 
 @MainActor
 class CoinListViewModel: ObservableObject {
@@ -25,18 +22,20 @@ class CoinListViewModel: ObservableObject {
         case allCoins
         case portfolio
     }
+    // 3. The property that USES the enum
     @Published var selectedTab: ListTab = .allCoins
+    
+    // --- NEW: Global Data ---
+    @Published var globalData: GlobalData?
     
     // --- Data Lists ---
     @Published private var allCoins: [Coin] = []
     @Published private var portfolioCoinIDs: Set<String> = []
     
-    // 3. This is our "smart" list that the UI will use.
+    // 4. This is our "smart" list that the UI will use.
     var coins: [Coin] {
-        // Filter by search text first
         let filteredBySearch = filter(coins: allCoins, with: searchText)
         
-        // Then, filter by tab
         switch selectedTab {
         case .allCoins:
             return filteredBySearch
@@ -46,28 +45,27 @@ class CoinListViewModel: ObservableObject {
     }
     
     // --- Services ---
-    private let dataService = CoinDataService.shared
-    private var portfolioService: PortfolioDataService? // 4. This is now OPTIONAL
+    private let coinDataService = CoinDataService.shared
+    private let globalDataService = GlobalDataService.shared // 5. ADDED SERVICE
+    private var portfolioService: PortfolioDataService?
     private var cancellables = Set<AnyCancellable>()
 
-    // 5. Simple, empty init
+    // 6. Simple, empty init
     init() {
         Task {
-            await fetchCoins()
+            await fetchAllData() // Call the "master" fetch
         }
     }
     
-    // 6. NEW setup function (called from View)
+    // 7. NEW setup function (called from View)
     func setup(modelContext: ModelContext) {
-        // If service already exists, don't create it again
         guard self.portfolioService == nil else { return }
-        
         let service = PortfolioDataService(modelContext: modelContext)
         self.portfolioService = service
         subscribeToPortfolio(service: service) // Start listening
     }
     
-    // 7. "Listens" to the database
+    // 8. "Listens" to the database
     private func subscribeToPortfolio(service: PortfolioDataService) {
         service.$savedEntities
             .map { entities -> Set<String> in
@@ -79,13 +77,11 @@ class CoinListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    // 8. --- THIS IS THE HELPER FUNCTION THAT WAS MISSING ---
-    // This function filters our coins based on search text
+    // 9. --- THIS IS THE HELPER FUNCTION THAT WAS MISSING ---
     private func filter(coins: [Coin], with text: String) -> [Coin] {
         guard !text.isEmpty else {
-            return coins // Return all if search is empty
+            return coins
         }
-        
         let lowercasedText = text.lowercased()
         return coins.filter { coin in
             coin.name.lowercased().contains(lowercasedText) ||
@@ -95,19 +91,30 @@ class CoinListViewModel: ObservableObject {
     
     // --- PUBLIC FUNCTIONS (for UI) ---
     
-    func refreshCoins() async {
+    // 10. This is the new "master" refresh
+    func refreshAllData() async {
         self.errorMessage = nil
+        
+        // Run both API calls in parallel
+        async let fetchCoinsTask = coinDataService.fetchCoins()
+        async let fetchGlobalDataTask = globalDataService.fetchGlobalData()
+        
         do {
-            let fetchedCoins = try await dataService.fetchCoins()
+            // Wait for both to complete
+            let (fetchedCoins, fetchedGlobalData) = try await (fetchCoinsTask, fetchGlobalDataTask)
+            
             self.allCoins = fetchedCoins
+            self.globalData = fetchedGlobalData
+            print("Successfully refreshed all data.")
+            
         } catch {
             self.errorMessage = error.localizedDescription
+            print("Failed to refresh all data: \(error)")
         }
     }
     
     func updatePortfolio(coin: Coin) {
         guard let portfolioService = portfolioService else { return }
-        
         if coinIsInPortfolio(coin: coin) {
             portfolioService.removeCoin(coinID: coin.id)
         } else {
@@ -121,9 +128,10 @@ class CoinListViewModel: ObservableObject {
 
     // --- PRIVATE FUNCTIONS ---
     
-    private func fetchCoins() async {
+    // 11. This is the initial load function
+    private func fetchAllData() async {
         self.isLoading = true
-        await refreshCoins() // Call the refresh function
+        await refreshAllData() // Call the "master" refresh
         self.isLoading = false
     }
 }

@@ -37,6 +37,10 @@ struct CoinListView: View {
             
             VStack { // We wrap everything in a VStack to hold the Picker
                 
+                if let globalData = viewModel.globalData {
+                                    GlobalStatsView(data: globalData)
+                                }
+                
                 // --- 1. THE PICKER (All Coins / Portfolio) ---
                 Picker("Select Tab", selection: $viewModel.selectedTab) {
                     Text("All Coins").tag(CoinListViewModel.ListTab.allCoins)
@@ -74,7 +78,7 @@ struct CoinListView: View {
                     }
                     .listStyle(.plain)
                     .refreshable {
-                        await viewModel.refreshCoins() // Pull-to-refresh
+                        await viewModel.refreshAllData() // Pull-to-refresh
                     }
                     
                     // --- 4. Show a loading spinner ---
