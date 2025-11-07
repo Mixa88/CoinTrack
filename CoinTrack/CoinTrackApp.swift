@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CoinTrackApp: App {
@@ -13,5 +14,6 @@ struct CoinTrackApp: App {
         WindowGroup {
             CoinListView()
         }
+        .modelContainer(for: PortfolioEntity.self)
     }
 }
