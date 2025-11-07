@@ -5,40 +5,40 @@
 //  Created by Михайло Тихонов on 06.11.2025.
 //
 
+// CoinListView.swift
 import SwiftUI
+import SwiftData
 
 struct CoinListView: View {
     
-    // 1. We create the "main brain" (ViewModel) for this screen.
-    // @StateObject ensures it stays alive as long as the screen is visible.
+    @Environment(\.modelContext) private var modelContext
+    
+    // 1. We go back to a simple @StateObject initialization
     @StateObject private var viewModel = CoinListViewModel()
+    
+    // 2. NO custom init() needed! The error is gone.
     
     var body: some View {
         NavigationStack {
-            
-            // 2. We use a ZStack to show a loading spinner *over* the list
             ZStack {
-                
-                // 3. The main list of coins
+                // ... (List, ProgressView, etc. are all the same) ...
                 List(viewModel.coins) { coin in
                     NavigationLink(destination: CoinDetailView(coin: coin)) {
-                                        CoinRowView(coin: coin) 
-                                    }
-                        .listRowSeparator(.hidden) // Makes it cleaner
-                        .listRowBackground(Color.clear) // Transparent background
+                        CoinRowView(coin: coin)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                 }
                 .listStyle(.plain)
                 .refreshable {
-                                await viewModel.refreshCoins() // Call our new function
-                            }
-                
-                // 4. Show a loading spinner *only* when isLoading is true
-                if viewModel.isLoading {
-                    ProgressView()
-                        .scaleEffect(1.5) // Make it a bit bigger
+                    await viewModel.refreshCoins()
                 }
                 
-                // 5. Show an error message if one exists
+                if viewModel.isLoading {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                }
+                
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .font(.headline)
@@ -48,13 +48,20 @@ struct CoinListView: View {
                         .cornerRadius(16)
                 }
             }
-            .navigationTitle("Live Prices") // TODO: We can localize this later
+            .navigationTitle("Live Prices")
             .searchable(text: $viewModel.searchText,
-                        prompt: "Search by name or symbol...") // TODO: Localize
+                        prompt: "Search by name or symbol...")
+            // 3. --- THIS IS THE FIX ---
+            // When the View appears, modelContext is ready.
+            // We call our setup() function and pass it.
+            .onAppear {
+                viewModel.setup(modelContext: modelContext)
+            }
         }
     }
 }
 
 #Preview {
     CoinListView()
+        .modelContainer(for: PortfolioEntity.self, inMemory: true)
 }
