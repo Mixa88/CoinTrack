@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BA502C862EC0827D00095EBD /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = BA502C852EC0827D00095EBD /* Shimmer */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		BAEAEA3A2EBCE82200B717A8 /* CoinTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoinTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA502C862EC0827D00095EBD /* Shimmer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = CoinTrack;
 			packageProductDependencies = (
+				BA502C852EC0827D00095EBD /* Shimmer */,
 			);
 			productName = CoinTrack;
 			productReference = BAEAEA3A2EBCE82200B717A8 /* CoinTrack.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = BAEAEA312EBCE82200B717A8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BA502C842EC0827D00095EBD /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BAEAEA3B2EBCE82200B717A8 /* Products */;
 			projectDirPath = "";
@@ -324,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BA502C842EC0827D00095EBD /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BA502C852EC0827D00095EBD /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA502C842EC0827D00095EBD /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BAEAEA322EBCE82200B717A8 /* Project object */;
 }
