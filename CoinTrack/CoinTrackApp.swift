@@ -12,7 +12,7 @@ import SwiftData
 struct CoinTrackApp: App {
     var body: some Scene {
         WindowGroup {
-            CoinListView()
+            MainTabView()
         }
         .modelContainer(for: PortfolioEntity.self)
     }
