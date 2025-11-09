@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import SwiftData // 1. IMPORT
+import SwiftData 
 
 @MainActor
 class CoinListViewModel: ObservableObject {

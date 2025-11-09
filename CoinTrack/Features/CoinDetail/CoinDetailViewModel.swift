@@ -10,47 +10,53 @@ import Foundation
 @MainActor
 class CoinDetailViewModel: ObservableObject {
     
-    // 1. Published properties for the UI to observe
-    // This will store just the prices: [1.2, 1.5, 1.3]
+    // --- Published Properties ---
     @Published var chartData: [Double] = []
-    @Published var isLoading = false
+    
+    // 1. --- ADD NEW PROPERTY ---
+    // This will hold the "en" description string
+    @Published var description: String?
+    
+    @Published var isLoading = true // Changed to `true` to show loading on init
     @Published var errorMessage: String? = nil
     
-    // 2. The service that fetches data
     private let dataService: CoinDetailDataService
     
-    // 3. The initializer receives the coin
-    // This is how we pass the coinID to the service
     init(coin: Coin) {
         self.dataService = CoinDetailDataService(coinID: coin.id)
         
-        // 4. Start fetching the chart data as soon as the VM is created
+        // 2. Start fetching ALL data
         Task {
-            await fetchChartData()
+            await fetchAllDetailData()
         }
     }
     
-    // 5. The function that calls the service
-    func fetchChartData() async {
+    // 3. --- RENAMED & UPGRADED FUNCTION ---
+    // This is now our "master" fetch function
+    func fetchAllDetailData() async {
         self.isLoading = true
         self.errorMessage = nil
         
+        // 4. --- ASYNC MAGIC ---
+        // Start both network calls in parallel
+        async let fetchChartTask = dataService.fetchChartData()
+        async let fetchDescriptionTask = dataService.fetchCoinDescription()
+        
         do {
-            // 6. Call the service
-            let coinDetail = try await dataService.fetchChartData()
+            // 5. Wait for both to complete
+            let (coinDetail, coinFullDetail) = try await (fetchChartTask, fetchDescriptionTask)
             
-            // 7. Process the data
-            // The API gives us [[Timestamp, Price], [Timestamp, Price]]
-            // We only want the Price: [Price, Price]
-            self.chartData = coinDetail.prices.map { $0[1] } // Get the second element (price)
+            // 6. Update our properties
+            self.chartData = coinDetail.prices.map { $0[1] } // Process chart data
+            self.description = coinFullDetail?.description?.englishDescription // Process description
             
             self.isLoading = false
-            print("Successfully fetched chart data. \(self.chartData.count) points.")
+            print("Successfully fetched all detail data.")
             
         } catch {
             self.isLoading = false
             self.errorMessage = error.localizedDescription
-            print("Failed to fetch chart data: \(error)")
+            print("Failed to fetch all detail data: \(error)")
         }
     }
 }

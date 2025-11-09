@@ -13,7 +13,7 @@ struct GlobalDataResponse: Codable {
 }
 
 // 2. This struct holds the actual statistics
-struct GlobalData: Codable {
+struct GlobalData: Codable, Equatable {
     
     // We will get a dictionary like: {"usd": 12345, "eur": 67890}
     // We only care about "usd"
