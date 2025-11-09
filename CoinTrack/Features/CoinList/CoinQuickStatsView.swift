@@ -1,0 +1,54 @@
+//
+//  CoinQuickStatsView.swift
+//  CoinTrack
+//
+//  Created by Михайло Тихонов on 09.11.2025.
+//
+
+
+import SwiftUI
+
+struct CoinQuickStatsView: View {
+    
+    // It just receives a coin
+    let coin: Coin
+    
+    var body: some View {
+        // We use our "card" style
+        VStack(alignment: .leading, spacing: 12) {
+            
+            // --- Header ---
+            HStack(spacing: 12) {
+                AsyncImage(url: URL(string: coin.image)) { image in
+                    image.resizable().scaledToFit()
+                } placeholder: {
+                    Circle().foregroundStyle(Color(.systemGray5))
+                }
+                .frame(width: 32, height: 32)
+                
+                VStack(alignment: .leading) {
+                    Text(coin.name)
+                        .font(.headline)
+                    Text(coin.symbol.uppercased())
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            
+            Divider()
+            
+            // --- Stats ---
+            StatisticRowView(title: "Market Cap", value: (coin.marketCap ?? 0).toFormattedString())
+            StatisticRowView(title: "24h High", value: (coin.high24H ?? 0).toCurrencyString())
+            StatisticRowView(title: "24h Low", value: (coin.low24H ?? 0).toCurrencyString())
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(16)
+        .frame(maxWidth: 300) // Constrain the width for a "pop-up" feel
+    }
+}
+
+#Preview {
+    CoinQuickStatsView(coin: Coin.mock)
+}
