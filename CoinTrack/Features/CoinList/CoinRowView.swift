@@ -48,9 +48,9 @@ struct CoinRowView: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                 
-                Text(coin.priceChangePercentage24H.toPercentString())
+                Text((coin.priceChangePercentage24H ?? 0).toPercentString()) // <-- ADD ?? 0
                     .font(.caption)
-                    .foregroundStyle(coin.priceChangePercentage24H >= 0 ? .green : .red)
+                    .foregroundStyle((coin.priceChangePercentage24H ?? 0) >= 0 ? .green : .red)
             }
         }
         .padding(.vertical, 8) // Add some "cozy" vertical space
