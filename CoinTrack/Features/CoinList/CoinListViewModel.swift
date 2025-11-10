@@ -7,7 +7,8 @@
 
 import Foundation
 import Combine
-import SwiftData 
+import SwiftData
+import UserNotifications
 
 @MainActor
 class CoinListViewModel: ObservableObject {
@@ -17,7 +18,7 @@ class CoinListViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     @Published var searchText = ""
     
-    // 2. THIS IS THE ENUM (It must be defined *before* use)
+    
     enum ListTab {
         case allCoins
         case portfolio
@@ -105,6 +106,9 @@ class CoinListViewModel: ObservableObject {
             
             self.allCoins = fetchedCoins
             self.globalData = fetchedGlobalData
+            
+            checkAlerts()
+            
             print("Successfully refreshed all data.")
             
         } catch {
@@ -133,5 +137,36 @@ class CoinListViewModel: ObservableObject {
         self.isLoading = true
         await refreshAllData() // Call the "master" refresh
         self.isLoading = false
+    }
+    
+    private func checkAlerts() {
+        // We only check coins in our portfolio
+        let portfolioCoins = allCoins.filter { portfolioCoinIDs.contains($0.id) }
+
+        // Loop through *only* our saved coins
+        for coin in portfolioCoins {
+            // Check if 24h change is more than 5% (example)
+            // (We must safely unwrap the optional)
+            if let priceChange = coin.priceChangePercentage24H, abs(priceChange) > 5.0 {
+                // If it is, send an alert!
+                sendNotification(for: coin, change: priceChange)
+            }
+        }
+    }
+
+    /// Creates and sends a local notification
+    private func sendNotification(for coin: Coin, change: Double) {
+        let content = UNMutableNotificationContent()
+        content.title = "\(coin.name) Price Alert"
+
+        let direction = change > 0 ? "increased" : "decreased"
+        content.body = "\(coin.symbol.uppercased()) has \(direction) by \(change.toPercentString()) in 24h!"
+        content.sound = .default
+
+        // Fire immediately
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: coin.id, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request)
     }
 }
