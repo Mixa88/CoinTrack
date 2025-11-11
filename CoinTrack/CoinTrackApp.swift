@@ -9,6 +9,7 @@
 import SwiftUI
 import SwiftData
 import UserNotifications
+import LocalAuthentication
 
 @main
 struct CoinTrackApp: App {
@@ -16,6 +17,8 @@ struct CoinTrackApp: App {
     
     init() {
         requestNotificationAuthorization()
+        
+        requestBiometricAuth()
     }
     
     var body: some Scene {
@@ -35,4 +38,16 @@ struct CoinTrackApp: App {
             }
         }
     }
+    
+    private func requestBiometricAuth() {
+            let context = LAContext()
+            var error: NSError?
+
+            // Check if biometric authentication is available
+            if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+                print("Biometrics are available.")
+            } else {
+                print("Biometrics not available. Error: \(error?.localizedDescription ?? "Unknown")")
+            }
+        }
 }

@@ -5,32 +5,46 @@
 //  Created by Михайло Тихонов on 09.11.2025.
 //
 
+// MainTabView.swift
 import SwiftUI
 
 struct MainTabView: View {
+    
+    // 1. Create the "gatekeeper" ViewModel
+    // We use @StateObject because this View "owns" it.
+    @StateObject private var lockViewModel = AppLockViewModel()
+    
     var body: some View {
-        TabView {
+        // 2. We wrap everything in a ZStack
+        ZStack {
             
-            // --- Tab 1: Our existing CoinList ---
-            CoinListView()
-                .tabItem {
-                    Label("Prices", systemImage: "list.bullet") // TODO: Localize
-                }
+            // 3. The "Content" (our app)
+            // It's ALWAYS in the hierarchy, but...
+            TabView {
+                CoinListView()
+                    .tabItem {
+                        Label("Prices", systemImage: "list.bullet")
+                    }
+                
+                NewsView()
+                    .tabItem {
+                        Label("News", systemImage: "newspaper")
+                    }
+            }
+            .tint(.blue)
             
-            // --- Tab 2: The new News tab ---
-            NewsView()
-                .tabItem {
-                    Label("News", systemImage: "newspaper") // TODO: Localize
-                }
+            // 4. The "Gate"
+            // If we are NOT unlocked...
+            if !lockViewModel.isUnlocked {
+                // ...show the LockView ON TOP of everything.
+                LockView(viewModel: lockViewModel)
+                    .transition(.opacity.animation(.easeIn(duration: 0.3)))
+            }
         }
-        // We can set the "cozy" tint color for the active tab here
-        .tint(.blue)
     }
 }
 
 #Preview {
     MainTabView()
-        // We MUST add this to the preview
-        // so CoinListView (which needs SwiftData) doesn't crash it
         .modelContainer(for: PortfolioEntity.self, inMemory: true)
 }
