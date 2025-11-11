@@ -8,21 +8,93 @@
 
 /* Begin PBXBuildFile section */
 		BA502C862EC0827D00095EBD /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = BA502C852EC0827D00095EBD /* Shimmer */; };
+		BAB969662EC3405F00233B47 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969652EC3405F00233B47 /* WidgetKit.framework */; };
+		BAB969682EC3405F00233B47 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969672EC3405F00233B47 /* SwiftUI.framework */; };
+		BAB969772EC3406000233B47 /* CoinTrackWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BAB969632EC3405F00233B47 /* CoinTrackWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BAB969862EC3483C00233B47 /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969852EC3483C00233B47 /* SwiftData.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		BAB969752EC3406000233B47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BAEAEA322EBCE82200B717A8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAB969622EC3405F00233B47;
+			remoteInfo = CoinTrackWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BAB9697C2EC3406000233B47 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BAB969772EC3406000233B47 /* CoinTrackWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		BAB969632EC3405F00233B47 /* CoinTrackWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CoinTrackWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAB969652EC3405F00233B47 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		BAB969672EC3405F00233B47 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		BAB9697D2EC3412D00233B47 /* CoinTrackWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoinTrackWidgetExtension.entitlements; sourceTree = "<group>"; };
+		BAB969852EC3483C00233B47 /* SwiftData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftData.framework; path = System/Library/Frameworks/SwiftData.framework; sourceTree = SDKROOT; };
 		BAEAEA3A2EBCE82200B717A8 /* CoinTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoinTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BAB969782EC3406000233B47 /* Exceptions for "CoinTrackWidget" folder in "CoinTrackWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */;
+		};
+		BAB9697F2EC3444500233B47 /* Exceptions for "CoinTrack" folder in "CoinTrackWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Data/PortfolioEntity.swift,
+				Core/Data/SharedModelContainer.swift,
+			);
+			target = BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		BAB969692EC3405F00233B47 /* CoinTrackWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BAB969782EC3406000233B47 /* Exceptions for "CoinTrackWidget" folder in "CoinTrackWidgetExtension" target */,
+			);
+			path = CoinTrackWidget;
+			sourceTree = "<group>";
+		};
 		BAEAEA3C2EBCE82200B717A8 /* CoinTrack */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BAB9697F2EC3444500233B47 /* Exceptions for "CoinTrack" folder in "CoinTrackWidgetExtension" target */,
+			);
 			path = CoinTrack;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BAB969602EC3405F00233B47 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAB969682EC3405F00233B47 /* SwiftUI.framework in Frameworks */,
+				BAB969662EC3405F00233B47 /* WidgetKit.framework in Frameworks */,
+				BAB969862EC3483C00233B47 /* SwiftData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BAEAEA372EBCE82200B717A8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -34,10 +106,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BAB969642EC3405F00233B47 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BAB969852EC3483C00233B47 /* SwiftData.framework */,
+				BAB969652EC3405F00233B47 /* WidgetKit.framework */,
+				BAB969672EC3405F00233B47 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BAEAEA312EBCE82200B717A8 = {
 			isa = PBXGroup;
 			children = (
+				BAB9697D2EC3412D00233B47 /* CoinTrackWidgetExtension.entitlements */,
 				BAEAEA3C2EBCE82200B717A8 /* CoinTrack */,
+				BAB969692EC3405F00233B47 /* CoinTrackWidget */,
+				BAB969642EC3405F00233B47 /* Frameworks */,
 				BAEAEA3B2EBCE82200B717A8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				BAEAEA3A2EBCE82200B717A8 /* CoinTrack.app */,
+				BAB969632EC3405F00233B47 /* CoinTrackWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,6 +139,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BAB969792EC3406000233B47 /* Build configuration list for PBXNativeTarget "CoinTrackWidgetExtension" */;
+			buildPhases = (
+				BAB9695F2EC3405F00233B47 /* Sources */,
+				BAB969602EC3405F00233B47 /* Frameworks */,
+				BAB969612EC3405F00233B47 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				BAB969692EC3405F00233B47 /* CoinTrackWidget */,
+			);
+			name = CoinTrackWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = CoinTrackWidgetExtension;
+			productReference = BAB969632EC3405F00233B47 /* CoinTrackWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		BAEAEA392EBCE82200B717A8 /* CoinTrack */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAEAEA452EBCE82300B717A8 /* Build configuration list for PBXNativeTarget "CoinTrack" */;
@@ -60,10 +168,12 @@
 				BAEAEA362EBCE82200B717A8 /* Sources */,
 				BAEAEA372EBCE82200B717A8 /* Frameworks */,
 				BAEAEA382EBCE82200B717A8 /* Resources */,
+				BAB9697C2EC3406000233B47 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BAB969762EC3406000233B47 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				BAEAEA3C2EBCE82200B717A8 /* CoinTrack */,
@@ -86,6 +196,9 @@
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
+					BAB969622EC3405F00233B47 = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					BAEAEA392EBCE82200B717A8 = {
 						CreatedOnToolsVersion = 16.4;
 					};
@@ -109,11 +222,19 @@
 			projectRoot = "";
 			targets = (
 				BAEAEA392EBCE82200B717A8 /* CoinTrack */,
+				BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		BAB969612EC3405F00233B47 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BAEAEA382EBCE82200B717A8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,6 +245,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BAB9695F2EC3405F00233B47 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BAEAEA362EBCE82200B717A8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -133,7 +261,71 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		BAB969762EC3406000233B47 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */;
+			targetProxy = BAB969752EC3406000233B47 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		BAB9697A2EC3406000233B47 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CoinTrackWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M4AN86ZBTV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CoinTrackWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CoinTrackWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Mixa.CoinTrack.CoinTrackWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BAB9697B2EC3406000233B47 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CoinTrackWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M4AN86ZBTV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CoinTrackWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CoinTrackWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Mixa.CoinTrack.CoinTrackWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		BAEAEA432EBCE82300B717A8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -260,6 +452,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CoinTrack/CoinTrack.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M4AN86ZBTV;
@@ -288,6 +481,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CoinTrack/CoinTrack.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M4AN86ZBTV;
@@ -314,6 +508,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BAB969792EC3406000233B47 /* Build configuration list for PBXNativeTarget "CoinTrackWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BAB9697A2EC3406000233B47 /* Debug */,
+				BAB9697B2EC3406000233B47 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BAEAEA352EBCE82200B717A8 /* Build configuration list for PBXProject "CoinTrack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
