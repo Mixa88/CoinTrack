@@ -8,10 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		BA502C862EC0827D00095EBD /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = BA502C852EC0827D00095EBD /* Shimmer */; };
+		BA7653362EC3E64400F27B35 /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969852EC3483C00233B47 /* SwiftData.framework */; };
+		BA7653372EC3E72D00F27B35 /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969852EC3483C00233B47 /* SwiftData.framework */; };
 		BAB969662EC3405F00233B47 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969652EC3405F00233B47 /* WidgetKit.framework */; };
 		BAB969682EC3405F00233B47 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969672EC3405F00233B47 /* SwiftUI.framework */; };
 		BAB969772EC3406000233B47 /* CoinTrackWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BAB969632EC3405F00233B47 /* CoinTrackWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		BAB969862EC3483C00233B47 /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAB969852EC3483C00233B47 /* SwiftData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,15 @@
 			membershipExceptions = (
 				Core/Data/PortfolioEntity.swift,
 				Core/Data/SharedModelContainer.swift,
+				"Core/Extensions/Double+Extensions.swift",
+				Core/Services/CoinDataService.swift,
+				Core/Services/GlobalDataService.swift,
+				Core/Views/StatisticRowView.swift,
+				Models/Coin.swift,
+				Models/CoinDetail.swift,
+				Models/CoinFullDetail.swift,
+				Models/GlobalData.swift,
+				Secrets.swift,
 			);
 			target = BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */;
 		};
@@ -91,7 +101,7 @@
 			files = (
 				BAB969682EC3405F00233B47 /* SwiftUI.framework in Frameworks */,
 				BAB969662EC3405F00233B47 /* WidgetKit.framework in Frameworks */,
-				BAB969862EC3483C00233B47 /* SwiftData.framework in Frameworks */,
+				BA7653362EC3E64400F27B35 /* SwiftData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA7653372EC3E72D00F27B35 /* SwiftData.framework in Frameworks */,
 				BA502C862EC0827D00095EBD /* Shimmer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

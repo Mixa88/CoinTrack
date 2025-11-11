@@ -172,23 +172,6 @@ extension View {
 }
 
 
-// --- StatisticRowView (Helper) ---
-struct StatisticRowView: View {
-    let title: String
-    let value: String
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Spacer()
-            Text(value)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-        }
-    }
-}
 
 // --- Preview ---
 #Preview {

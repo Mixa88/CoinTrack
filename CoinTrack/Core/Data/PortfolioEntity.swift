@@ -14,10 +14,10 @@ import SwiftData
 class PortfolioEntity {
     
     // 2. This is the coin ID, e.g., "bitcoin"
-    let coinID: String
+    var coinID: String
     
     // 3. It's good practice to save when it was added
-    let savedAt: Date
+    var savedAt: Date
     
     // 4. The initializer
     init(coinID: String) {

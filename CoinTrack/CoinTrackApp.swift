@@ -14,14 +14,6 @@ import LocalAuthentication
 @main
 struct CoinTrackApp: App {
     
-    // --- 1. "СПІЛЬНИЙ КОНТЕЙНЕР" ---
-    //
-    // --- ЗМІНА 1: Змінюємо 'lazy var' на 'static let' ---
-    // `static let` створюється один раз і є "лінивим" за замовчуванням
-    //
-    
-    
-    
     init() {
         requestNotificationAuthorization()
         requestBiometricAuth()
