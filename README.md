@@ -4,15 +4,14 @@
 
 This project was built to demonstrate a deep understanding of modern iOS development, including **MVVM architecture**, **SwiftData**, **WidgetKit**, and advanced **Concurrency** with `async/await`.
 
-### 🎥 Key Features (GIFs)
-
-*(These GIFs demonstrate the app's "premium" feel and polish)*
+### ✨ Key Features (Screenshots)
 
 | Main List (Live Search) | Portfolio (SwiftData) |
 | :---: | :---: |
-| [PLACEHOLDER_GIF_OF_SEARCH_AND_PORTFOLIO_TOGGLE] | [PLACEHOLDER_GIF_OF_ADDING_TO_PORTFOLIO] |
+| ![Main List](https://github.com/user-attachments/assets/ed7d3025-ba63-49c8-86c2-de52706259f7) | ![Portfolio](https://github.com/user-attachments/assets/61a40889-ddcc-4e23-a2b7-4304bf668c66) |
 | **Detail View (Live Chart)** | **Widget & Face ID** |
-| [PLACEHOLDER_GIF_OF_DETAIL_VIEW_CHART_AND_STATS] | [PLACEHOLDER_GIF_OF_WIDGET_AND_FACEID_LOCK] |
+| :---: | :---: |
+| ![Detail View](https://github.com/user-attachments/assets/4b3a4ae8-0157-49b1-ba8c-a84da044ea09) | ![Widget + Lock](https://github.com/user-attachments/assets/5c5f25ef-4bde-462e-b22b-8a330347ca88) |
 
 ---
 
