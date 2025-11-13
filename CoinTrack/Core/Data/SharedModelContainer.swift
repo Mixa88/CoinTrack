@@ -19,7 +19,7 @@ struct SharedModelContainer {
             PortfolioEntity.self,
         ])
         
-        let appGroupID = "group.com.Mixa88.CoinTrack" // <-- ПЕРЕВІР, ЩО ЦЕ ТВОЄ ІМ'Я
+        let appGroupID = "group.com.Mixa88.CoinTrack"
         
         guard let groupContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
             fatalError("Failed to get shared container URL.")

@@ -17,7 +17,7 @@ struct NewsView: View {
             
             ZStack {
                 if viewModel.isLoading {
-                    // ... (Твій код "Скелетону" тут)
+                    
                     List {
                         ForEach(0..<10) { _ in
                             CoinRowSkeletonView()
@@ -28,7 +28,7 @@ struct NewsView: View {
                     .listStyle(.plain)
                 
                 } else {
-                    // --- 3. The real data ---
+                    
                     List(viewModel.articles) { article in
                         
                         // --- 2. THE FIX IS HERE ---

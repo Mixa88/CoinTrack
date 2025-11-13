@@ -79,31 +79,29 @@ class CoinListViewModel: ObservableObject {
     
     // --- PUBLIC FUNCTIONS (for UI) ---
     
-    // "Майстер-функція" оновлення
+    
     func refreshAllData() async {
         self.errorMessage = nil
         
-        // Запускаємо ВСІ ТРИ запити паралельно
+        
         async let fetchCoinsTask = coinDataService.fetchCoins()
         async let fetchGlobalDataTask = globalDataService.fetchGlobalData()
         async let fetchFearGreedTask = fearGreedService.fetchFearGreedIndex()
         
         do {
-            // Чекаємо, доки ВСІ ТРИ завершаться
+            
             let (fetchedCoins, fetchedGlobalData, fetchedFearGreedData) =
                 try await (fetchCoinsTask, fetchGlobalDataTask, fetchFearGreedTask)
             
-            // Оновлюємо всі наші @Published властивості
+            
             self.allCoins = fetchedCoins
             self.globalData = fetchedGlobalData
             self.fearGreedData = fetchedFearGreedData
             
-            // --- ОНОВЛЕННЯ ---
-            // ТІЛЬКИ ПІСЛЯ того, як `allCoins` завантажено,
-            // ми можемо обрати "Монету дня"
+            
             self.spotlightCoin = spotlightService.getSpotlightCoin(from: fetchedCoins)
             
-            checkAlerts() // Перевіряємо сповіщення
+            checkAlerts()
             print("Successfully refreshed all data.")
             
         } catch {
@@ -127,14 +125,14 @@ class CoinListViewModel: ObservableObject {
 
     // --- PRIVATE FUNCTIONS ---
     
-    // Завантаження при першому запуску
+    
     private func fetchAllData() async {
         self.isLoading = true
         await refreshAllData()
         self.isLoading = false
     }
     
-    // Допоміжна функція пошуку
+    
     private func filter(coins: [Coin], with text: String) -> [Coin] {
         guard !text.isEmpty else {
             return coins
@@ -146,7 +144,7 @@ class CoinListViewModel: ObservableObject {
         }
     }
     
-    // --- Сповіщення ---
+    
     private func checkAlerts() {
         let portfolioCoins = allCoins.filter { portfolioCoinIDs.contains($0.id) }
         

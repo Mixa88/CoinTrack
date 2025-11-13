@@ -9,15 +9,15 @@ import SwiftUI
 
 struct GlobalStatsView: View {
     
-    // 1. "Очікуємо" ОБИДВА об'єкти
+    
     let globalData: GlobalData
-    let fearGreedData: FearGreedData? // Він опціональний, бо може не завантажитись
+    let fearGreedData: FearGreedData?
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
                 
-                // --- 2. Статистика (як і раніше) ---
+                
                 StatisticItemView(
                     title: "Market Cap",
                     value: (globalData.marketCapUSD).toFormattedString()
@@ -33,8 +33,8 @@ struct GlobalStatsView: View {
                     value: (globalData.btcDominance).toDominanceString()
                 )
                 
-                // --- 3. НОВИЙ БЛОК: "Страх та Жадібність" ---
-                // Ми показуємо його, ТІЛЬКИ якщо він завантажився
+              
+                
                 if let fearGreed = fearGreedData {
                     StatisticItemView(
                         title: fearGreed.valueClassification, // "Fear", "Greed" etc.
@@ -70,7 +70,7 @@ struct StatisticItemView: View {
 }
 
 #Preview {
-    // Створюємо "фейкові" дані для обох
+    
     let mockGlobalData = GlobalData(
         totalMarketCap: ["usd": 1234567890123.0],
         totalVolume: ["usd": 150000000000.0],

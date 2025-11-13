@@ -23,7 +23,7 @@ struct CoinTrackApp: App {
         WindowGroup {
             MainTabView()
         }
-        // 7. "ВПРОВАДЖУЄМО" НАШ "СПІЛЬНИЙ" КОНТЕЙНЕР
+        
         .modelContainer(SharedModelContainer.sharedModelContainer)
     }
     

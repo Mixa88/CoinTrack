@@ -40,9 +40,9 @@ struct CoinRowView: View {
                     .foregroundStyle(.gray)
             }
             
-            Spacer() // Pushes everything to the left and right
+            Spacer() 
             
-            // --- 4. Price and 24h Change ---
+           
             VStack(alignment: .trailing, spacing: 4) {
                 Text(coin.currentPrice.toCurrencyString())
                     .font(.subheadline)
