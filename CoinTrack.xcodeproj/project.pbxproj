@@ -68,6 +68,7 @@
 				Models/Coin.swift,
 				Models/CoinDetail.swift,
 				Models/CoinFullDetail.swift,
+				Models/FearGreedResponse.swift,
 				Models/GlobalData.swift,
 				Secrets.swift,
 			);

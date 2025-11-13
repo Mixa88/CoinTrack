@@ -26,12 +26,10 @@ struct CoinListView: View {
             VStack(spacing: 12) {
                 
                 // 1) Global stats
-                if let global = viewModel.globalData {
-                    GlobalStatsView(data: global)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
-                        .animation(.easeOut(duration: 0.28), value: (viewModel.globalData != nil))
-                }
-                
+                if let globalData = viewModel.globalData {
+                                    // Передаємо ОБИДВА об'єкти даних
+                                    GlobalStatsView(globalData: globalData, fearGreedData: viewModel.fearGreedData)
+                                }
                 // 2) Segmented picker
                 Picker("Select Tab", selection: $viewModel.selectedTab) {
                     Text("All Coins").tag(CoinListViewModel.ListTab.allCoins)

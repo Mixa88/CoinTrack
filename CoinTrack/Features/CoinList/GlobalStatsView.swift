@@ -9,31 +9,42 @@ import SwiftUI
 
 struct GlobalStatsView: View {
     
-    // 1. This View is "dumb". It just receives data.
-    let data: GlobalData
+    // 1. "Очікуємо" ОБИДВА об'єкти
+    let globalData: GlobalData
+    let fearGreedData: FearGreedData? // Він опціональний, бо може не завантажитись
     
     var body: some View {
-        // 2. We use a "cozy" horizontal scroll
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
-                // 3. We create a "helper" view for each stat
+                
+                // --- 2. Статистика (як і раніше) ---
                 StatisticItemView(
                     title: "Market Cap",
-                    value: (data.marketCapUSD).toFormattedString()
+                    value: (globalData.marketCapUSD).toFormattedString()
                 )
                 
                 StatisticItemView(
                     title: "Total Volume",
-                    value: (data.volumeUSD).toFormattedString()
+                    value: (globalData.volumeUSD).toFormattedString()
                 )
                 
                 StatisticItemView(
                     title: "BTC Dominance",
-                    value: (data.btcDominance).toDominanceString()
+                    value: (globalData.btcDominance).toDominanceString()
                 )
+                
+                // --- 3. НОВИЙ БЛОК: "Страх та Жадібність" ---
+                // Ми показуємо його, ТІЛЬКИ якщо він завантажився
+                if let fearGreed = fearGreedData {
+                    StatisticItemView(
+                        title: fearGreed.valueClassification, // "Fear", "Greed" etc.
+                        value: fearGreed.value // "42", "69" etc.
+                    )
+                }
+                
             }
-            .padding(.horizontal) // Add padding so it doesn't touch the edges
-            .padding(.vertical, 8) // A bit of top/bottom padding
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
     }
 }
@@ -59,12 +70,17 @@ struct StatisticItemView: View {
 }
 
 #Preview {
-    // Create mock data
+    // Створюємо "фейкові" дані для обох
     let mockGlobalData = GlobalData(
         totalMarketCap: ["usd": 1234567890123.0],
         totalVolume: ["usd": 150000000000.0],
         marketCapPercentage: ["btc": 45.1234]
     )
     
-    return GlobalStatsView(data: mockGlobalData)
+    let mockFearGreedData = FearGreedData(
+        value: "55",
+        valueClassification: "Neutral"
+    )
+    
+    return GlobalStatsView(globalData: mockGlobalData, fearGreedData: mockFearGreedData)
 }
