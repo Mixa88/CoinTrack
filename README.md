@@ -8,10 +8,10 @@ This project was built to demonstrate a deep understanding of modern iOS develop
 
 | Main List (Live Search) | Portfolio (SwiftData) |
 | :---: | :---: |
-| ![Main List](https://github.com/user-attachments/assets/ed7d3025-ba63-49c8-86c2-de52706259f7) | ![Portfolio](https://github.com/user-attachments/assets/61a40889-ddcc-4e23-a2b7-4304bf668c66) |
+| ![Main List](https://github.com/user-attachments/assets/ed7d3025-ba63-49c8-86c2-de52706259f7) | ![Detail View](https://github.com/user-attachments/assets/61a40889-ddcc-4e23-a2b7-4304bf668c66) |
 | **Detail View (Live Chart)** | **Widget & Face ID** |
 | :---: | :---: |
-| ![Detail View](https://github.com/user-attachments/assets/4b3a4ae8-0157-49b1-ba8c-a84da044ea09) | ![Widget + Lock](https://github.com/user-attachments/assets/5c5f25ef-4bde-462e-b22b-8a330347ca88) |
+| ![Portfolio](https://github.com/user-attachments/assets/4b3a4ae8-0157-49b1-ba8c-a84da044ea09) | ![Widget + Lock](https://github.com/user-attachments/assets/5c5f25ef-4bde-462e-b22b-8a330347ca88) |
 
 ---
 
