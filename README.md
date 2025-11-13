@@ -92,3 +92,12 @@ This happens because the simulator often fails to properly register the `App Gro
     * In Simulator: **Device → Erase All Content and Settings...**
     * In Xcode: Go to **Xcode → Settings... → Locations** and **delete the `DerivedData`** folder for this project.
     * Restart Xcode and run the **main `CoinTrack` app target** (not the widget target).
+  
+---
+
+## 🎓 Acknowledgements
+
+This project was built as a portfolio piece, and its foundation is built upon the incredible teachings of **Paul Hudson**.
+
+A huge thank you to his **[100 Days of SwiftUI](https://www.hackingwithswift.com/100/swiftui)** course, which provides the knowledge and confidence to build complex, "premium-polish" apps like this one.
+
