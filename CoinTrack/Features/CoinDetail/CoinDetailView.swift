@@ -67,6 +67,7 @@ extension CoinDetailView {
             Text(coin.currentPrice.toCurrencyString())
                 .font(.title2)
                 .foregroundColor(.primary)
+                .contentTransition(.numericText())
         }
         .padding(.top, 8)
     }

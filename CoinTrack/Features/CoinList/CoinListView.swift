@@ -170,48 +170,67 @@ struct CoinListView: View {
     
     // --- 5. NEW: HELPER VIEW FOR THE SPOTLIGHT CARD ---
     @ViewBuilder
-    private func spotlightView(coin: Coin) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Header
-            HStack {
-                Text("🔥 Coin of the Day") // TODO: Localize
-                    .font(.headline)
-                    .fontWeight(.bold)
-                Spacer()
-                
-                // Кнопка "сховати" (вона просто прибере її з UI до наступного запуску)
-                Button {
-                    withAnimation {
-                        viewModel.spotlightCoin = nil // Ховаємо картку
-                    }
-                } label: {
-                    Image(systemName: "xmark")
-                        .font(.caption.bold())
-                        .foregroundStyle(.secondary)
-                        .padding(8)
-                        .background(Circle().fill(Color(.systemGray5)))
+        private func spotlightView(coin: Coin) -> some View {
+            
+            // --- 1. ADD THIS LOGIC ---
+            // Get the price change (or 0 if nil)
+            let priceChange = coin.priceChangePercentage24H ?? 0
+            
+            // Determine the background color
+            let bgColor: Color = {
+                if priceChange > 0 {
+                    return .green.opacity(0.1) // "Cozy" green
+                } else if priceChange < 0 {
+                    return .red.opacity(0.1)   // "Cozy" red
+                } else {
+                    return Color(.systemGray6) // Neutral gray
                 }
-            }
-            
-            Divider()
-            
-            // The Coin Row (tappable)
-            NavigationLink(destination: CoinDetailView(coin: coin)) {
-                HStack(spacing: 12) {
-                    CoinRowView(coin: coin)
+            }()
+            // --- END OF LOGIC ---
+
+            VStack(alignment: .leading, spacing: 10) {
+                // Header
+                HStack {
+                    Text("🔥 Coin of the Day")
+                        .font(.headline)
+                        .fontWeight(.bold)
                     Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(.secondary)
+                    
+                    Button {
+                        withAnimation {
+                            viewModel.spotlightCoin = nil
+                        }
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.caption.bold())
+                            .foregroundStyle(.secondary)
+                            .padding(8)
+                            .background(Circle().fill(Color(.systemGray5)))
+                    }
                 }
+                
+                Divider()
+                
+                // The Coin Row
+                NavigationLink(destination: CoinDetailView(coin: coin)) {
+                    HStack(spacing: 12) {
+                        CoinRowView(coin: coin)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .tint(.primary)
             }
-            .tint(.primary) // Make the row text black/white
+            .padding()
+            // --- 2. UPDATE THE BACKGROUND ---
+            .background(bgColor) // <-- Use our new dynamic color
+            .cornerRadius(16)
+            .padding(.horizontal)
+            // 3. Add a "cozy" animation when the color changes
+            .animation(.easeInOut, value: bgColor)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(16)
-        .padding(.horizontal)
     }
-}
 
 // MARK: - Preview
 #Preview {
