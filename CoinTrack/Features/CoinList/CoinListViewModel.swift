@@ -18,7 +18,6 @@ class CoinListViewModel: ObservableObject {
     @Published var isLoading = true
     @Published var errorMessage: String? = nil
     @Published var searchText = ""
-    
     enum ListTab {
         case allCoins
         case portfolio
@@ -27,7 +26,8 @@ class CoinListViewModel: ObservableObject {
     
     // --- Data Properties ---
     @Published var globalData: GlobalData?
-    @Published var fearGreedData: FearGreedData? // Нова властивість для "Страху"
+    @Published var fearGreedData: FearGreedData?
+    @Published var spotlightCoin: Coin? // <-- Ось наша "Монета дня"
     @Published private var allCoins: [Coin] = []
     @Published private var portfolioCoinIDs: Set<String> = []
     
@@ -46,7 +46,8 @@ class CoinListViewModel: ObservableObject {
     // --- Services ---
     private let coinDataService = CoinDataService.shared
     private let globalDataService = GlobalDataService.shared
-    private let fearGreedService = FearGreedDataService.shared // Новий сервіс
+    private let fearGreedService = FearGreedDataService.shared
+    private let spotlightService = SpotlightService() // <-- Ось наш "Сервіс Монети дня"
     private var portfolioService: PortfolioDataService?
     private var cancellables = Set<AnyCancellable>()
 
@@ -85,7 +86,7 @@ class CoinListViewModel: ObservableObject {
         // Запускаємо ВСІ ТРИ запити паралельно
         async let fetchCoinsTask = coinDataService.fetchCoins()
         async let fetchGlobalDataTask = globalDataService.fetchGlobalData()
-        async let fetchFearGreedTask = fearGreedService.fetchFearGreedIndex() // Новий запит
+        async let fetchFearGreedTask = fearGreedService.fetchFearGreedIndex()
         
         do {
             // Чекаємо, доки ВСІ ТРИ завершаться
@@ -95,7 +96,12 @@ class CoinListViewModel: ObservableObject {
             // Оновлюємо всі наші @Published властивості
             self.allCoins = fetchedCoins
             self.globalData = fetchedGlobalData
-            self.fearGreedData = fetchedFearGreedData // Зберігаємо індекс страху
+            self.fearGreedData = fetchedFearGreedData
+            
+            // --- ОНОВЛЕННЯ ---
+            // ТІЛЬКИ ПІСЛЯ того, як `allCoins` завантажено,
+            // ми можемо обрати "Монету дня"
+            self.spotlightCoin = spotlightService.getSpotlightCoin(from: fetchedCoins)
             
             checkAlerts() // Перевіряємо сповіщення
             print("Successfully refreshed all data.")

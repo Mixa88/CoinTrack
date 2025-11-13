@@ -6,7 +6,6 @@
 //
 
 
-
 import SwiftUI
 import SwiftData
 
@@ -25,12 +24,21 @@ struct CoinListView: View {
         NavigationStack {
             VStack(spacing: 12) {
                 
-                // 1) Global stats
-                if let globalData = viewModel.globalData {
-                                    // Передаємо ОБИДВА об'єкти даних
-                                    GlobalStatsView(globalData: globalData, fearGreedData: viewModel.fearGreedData)
-                                }
-                // 2) Segmented picker
+                // --- 1. NEW: "COIN OF THE DAY" SPOTLIGHT ---
+                // We show this card IF the spotlight coin exists
+                if let coin = viewModel.spotlightCoin {
+                    spotlightView(coin: coin)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                }
+                
+                // --- 2. Global stats (as before) ---
+                if let global = viewModel.globalData {
+                    GlobalStatsView(globalData: global, fearGreedData: viewModel.fearGreedData)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        .animation(.easeOut(duration: 0.28), value: (viewModel.globalData != nil))
+                }
+                
+                // --- 3. Segmented picker (as before) ---
                 Picker("Select Tab", selection: $viewModel.selectedTab) {
                     Text("All Coins").tag(CoinListViewModel.ListTab.allCoins)
                     Text("Portfolio").tag(CoinListViewModel.ListTab.portfolio)
@@ -38,7 +46,7 @@ struct CoinListView: View {
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 
-                // 3) Main content area
+                // --- 4. Main content area (as before) ---
                 ZStack {
                     
                     // --- A. LOADING STATE (SKELETONS) ---
@@ -73,7 +81,6 @@ struct CoinListView: View {
                                 }
                                 .padding(.vertical, 6)
                                 .contextMenu {
-                                    // --- Context Menu ---
                                     Button {
                                         viewModel.updatePortfolio(coin: coin)
                                     } label: {
@@ -81,7 +88,6 @@ struct CoinListView: View {
                                               systemImage: viewModel.coinIsInPortfolio(coin: coin) ? "star.slash.fill" : "star.fill")
                                     }
                                 } preview: {
-                                    // --- Context Menu Preview ---
                                     CoinQuickStatsView(coin: coin)
                                 }
                             }
@@ -98,7 +104,6 @@ struct CoinListView: View {
                     
                     // --- C. OVERLAYS (Error / Empty) ---
                     
-                    // --- THIS IS THE MISSING CODE FOR THE ERROR ---
                     if let errorMessage = viewModel.errorMessage {
                         VStack(spacing: 12) {
                             Image(systemName: "wifi.slash")
@@ -119,7 +124,7 @@ struct CoinListView: View {
                                     .fontWeight(.bold)
                             }
                             .buttonStyle(.bordered)
-                            .tint(Color("BrandGreen")) // Use our "cozy" green
+                            .tint(.blue) // Or your BrandGreen
                         }
                         .padding()
                         .background(.ultraThinMaterial)
@@ -129,7 +134,6 @@ struct CoinListView: View {
                         .transition(.scale.combined(with: .opacity))
                     }
                     
-                    // --- THIS IS THE MISSING CODE FOR THE EMPTY PORTFOLIO ---
                     if !viewModel.isLoading && viewModel.selectedTab == .portfolio && viewModel.coins.isEmpty {
                         VStack(spacing: 8) {
                             Image(systemName: "star")
@@ -147,7 +151,7 @@ struct CoinListView: View {
                     }
                     
                 } // --- End of ZStack
-                .animation(.default, value: viewModel.isLoading) // Animate the switch
+                .animation(.default, value: viewModel.isLoading)
                 
             } // --- End of VStack
             .navigationTitle("Live Prices")
@@ -155,7 +159,57 @@ struct CoinListView: View {
             .onAppear {
                 viewModel.setup(modelContext: modelContext)
             }
-        } // --- End of NavigationStack
+            .task {
+                // Fetch data when the view appears (ViewModel's init already handles this)
+                // await viewModel.refreshAllData() // Це можна закоментувати, бо init вже працює
+            }
+            .padding(.top)
+            .background(Color(.systemBackground).ignoresSafeArea())
+        }
+    }
+    
+    // --- 5. NEW: HELPER VIEW FOR THE SPOTLIGHT CARD ---
+    @ViewBuilder
+    private func spotlightView(coin: Coin) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Header
+            HStack {
+                Text("🔥 Coin of the Day") // TODO: Localize
+                    .font(.headline)
+                    .fontWeight(.bold)
+                Spacer()
+                
+                // Кнопка "сховати" (вона просто прибере її з UI до наступного запуску)
+                Button {
+                    withAnimation {
+                        viewModel.spotlightCoin = nil // Ховаємо картку
+                    }
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.caption.bold())
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Circle().fill(Color(.systemGray5)))
+                }
+            }
+            
+            Divider()
+            
+            // The Coin Row (tappable)
+            NavigationLink(destination: CoinDetailView(coin: coin)) {
+                HStack(spacing: 12) {
+                    CoinRowView(coin: coin)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .tint(.primary) // Make the row text black/white
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(16)
+        .padding(.horizontal)
     }
 }
 
