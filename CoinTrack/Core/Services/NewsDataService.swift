@@ -7,38 +7,34 @@
 
 import Foundation
 
-// This service will be a singleton, just like our others
+// This service is now pointed to CryptoCompare
 class NewsDataService {
     
-    // 1. A single, shared instance
     static let shared = NewsDataService()
     
-    // 2. Build the URL using our secure key from Secrets.swift
-    // We also add "public=true" to get general news
-    private let apiURLString = "https://cryptopanic.com/api/developer/v2/posts/?auth_token=\(Secrets.cryptoPanicAPIKey)&public=true"
+    // 1. --- THE NEW URL ---
+    // This is the CryptoCompare /v2/news/ endpoint. No key needed.
+    private let apiURLString = "https://min-api.cryptocompare.com/data/v2/news/?lang=EN"
 
-    // 3. Private initializer
     private init() { }
     
-    // 4. The main fetch function
     func fetchNews() async throws -> [NewsArticle] {
         
         guard let url = URL(string: apiURLString) else {
             throw URLError(.badURL)
         }
         
-        // 5. Standard async network call
         let (data, response) = try await URLSession.shared.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw URLError(.badServerResponse)
         }
         
-        // 6. Decode the JSON into our `NewsResponse`
+        // 2. --- DECODE WITH THE NEW MODEL ---
         let decoder = JSONDecoder()
-        let newsResponse = try decoder.decode(NewsResponse.self, from: data)
+        let responseData = try decoder.decode(CryptoCompareResponse.self, from: data)
         
-        // 7. Return the `results` array
-        return newsResponse.results
+        // 3. Return the `Data` array
+        return responseData.data
     }
 }
