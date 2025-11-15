@@ -6,6 +6,7 @@
 //
 
 
+// NewsView.swift
 import SwiftUI
 
 struct NewsView: View {
@@ -17,7 +18,7 @@ struct NewsView: View {
             
             ZStack {
                 if viewModel.isLoading {
-                    
+                    // --- Loading Skeletons ---
                     List {
                         ForEach(0..<10) { _ in
                             CoinRowSkeletonView()
@@ -28,18 +29,14 @@ struct NewsView: View {
                     .listStyle(.plain)
                 
                 } else {
-                    
+                    // --- 3. The real data ---
                     List(viewModel.articles) { article in
                         
-                        // --- 2. THE FIX IS HERE ---
-                        // We link to the SOURCE URL, not the article URL
-                        if let urlString = article.source?.url, let url = URL(string: urlString) {
+                        // We link to the article URL
+                        if let url = article.articleURL {
                             Link(destination: url) {
-                                newsRow(article: article)
+                                newsRow(article: article) // Use our "cozy" helper
                             }
-                        } else {
-                            // If no URL, just show the row (not tappable)
-                            newsRow(article: article)
                         }
                     }
                     .listStyle(.plain)
@@ -49,7 +46,7 @@ struct NewsView: View {
                     }
                 }
                 
-                // --- 5. Error Overlay ---
+                // --- Error Overlay ---
                 if let errorMessage = viewModel.errorMessage {
                     VStack(spacing: 12) {
                         Image(systemName: "wifi.slash")
@@ -57,7 +54,6 @@ struct NewsView: View {
                         Text("Failed to load news")
                             .font(.headline)
                         
-                        // Show the actual error
                         Text(errorMessage)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
@@ -78,22 +74,34 @@ struct NewsView: View {
         }
     }
     
-    // --- 6. Helper View for our News Row ---
+    // --- 6. "COZY" NEWS ROW ---
+    // We now display the image and the source name
     @ViewBuilder
     private func newsRow(article: NewsArticle) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        HStack(spacing: 12) {
+            // --- 1. Image ---
+            AsyncImage(url: URL(string: article.imageUrl)) { image in
+                image.resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            } placeholder: {
+                RoundedRectangle(cornerRadius: 12)
+                    .frame(width: 60, height: 60)
+                    .foregroundStyle(Color(.systemGray5))
+            }
             
-            // --- 2. THE FIX IS HERE ---
-            // Use ?? to provide a default value if data is nil
-            Text(article.title ?? "No Title")
-                .font(.headline)
-                .foregroundStyle(.primary)
-            
-            // --- 3. THE FIX IS HERE ---
-            // Use ?. to safely access optional `source`
-            Text(article.source?.domain ?? "No Source")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            // --- 2. Text ---
+            VStack(alignment: .leading, spacing: 6) {
+                Text(article.title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                    .lineLimit(3) // Limit to 3 lines
+                
+                Text(article.source.uppercased()) // "CNN", "CoinTelegraph"
+                    .font(.caption.bold())
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(.vertical, 8)
     }

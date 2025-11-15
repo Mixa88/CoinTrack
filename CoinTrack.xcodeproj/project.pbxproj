@@ -70,6 +70,7 @@
 				Models/CoinFullDetail.swift,
 				Models/FearGreedResponse.swift,
 				Models/GlobalData.swift,
+				Models/NewsArticle.swift,
 				Secrets.swift,
 			);
 			target = BAB969622EC3405F00233B47 /* CoinTrackWidgetExtension */;
