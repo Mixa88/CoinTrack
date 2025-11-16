@@ -89,17 +89,38 @@ extension CoinDetailView {
             Text("7-Day Chart")
                 .font(.headline)
             Chart {
-                ForEach(Array(viewModel.chartData.enumerated()), id: \.offset) { index, price in
-                    LineMark(
-                        x: .value("Date", index),
-                        y: .value("Price", price)
-                    )
-                    .foregroundStyle(coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red)
-                }
-            }
-            .chartXAxis(.hidden)
-            .chartYAxis(.hidden)
-            .frame(height: 60) // Your "sparkline" height
+                            ForEach(Array(viewModel.chartData.enumerated()), id: \.offset) { index, price in
+                                
+                                // --- 1. THE LINE (as before) ---
+                                LineMark(
+                                    x: .value("Date", index),
+                                    y: .value("Price", price)
+                                )
+                                // --- 2. ADD THIS (Thinner line) ---
+                                .lineStyle(.init(lineWidth: 2)) // Робимо лінію "чистішою"
+                                .foregroundStyle(coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red)
+                                
+                                // --- 3. ADD THIS (The gradient area) ---
+                                AreaMark(
+                                    x: .value("Date", index),
+                                    y: .value("Price", price)
+                                )
+                                // "Заливаємо" її градієнтом
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            (coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red).opacity(0.3),
+                                            .clear
+                                        ]),
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                            }
+                        }
+                        .chartXAxis(.hidden)
+                        .chartYAxis(.hidden)
+                        .frame(height: 60)
         }
         .asCard() // Use our custom card modifier
     }

@@ -46,6 +46,19 @@ struct NewsView: View {
                                     }
                             }
                         }
+                        
+                        VStack {
+                            Spacer()
+                            VStack(spacing: 4) {
+                                Text("News is automatically sourced from the CryptoCompare News API.")
+                                Text("CoinTrack does not create, edit, or verify external content.")
+                            }
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.vertical, 16)
+                            .background(.ultraThinMaterial) // "Затишна" напівпрозора плашка
+                        }
                     }
                     .listStyle(.plain)
                     .refreshable {
@@ -55,18 +68,7 @@ struct NewsView: View {
                 }
                 
                
-                VStack {
-                    Spacer()
-                    VStack(spacing: 4) {
-                        Text("News is automatically sourced from the CryptoCompare News API.")
-                        Text("CoinTrack does not create, edit, or verify external content.")
-                    }
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical, 16)
-                    .background(.ultraThinMaterial) // "Затишна" напівпрозора плашка
-                }
+            
                 
                 
                 if let errorMessage = viewModel.errorMessage {
@@ -108,34 +110,40 @@ struct NewsView: View {
 
     @ViewBuilder
     private func newsRow(article: NewsArticle) -> some View {
-        HStack(spacing: 12) {
-            // --- 1. Картинка ---
-            AsyncImage(url: article.fullImageURL) { image in
-                image.resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            } placeholder: {
-                RoundedRectangle(cornerRadius: 12)
-                    .frame(width: 60, height: 60)
-                    .foregroundStyle(Color(.systemGray5))
+        
+        VStack { // We use a VStack to hold the padding
+                    HStack(spacing: 12) {
+                        // --- Image ---
+                        AsyncImage(url: article.fullImageURL) { image in
+                            image.resizable()
+                                .scaledToFill()
+                                .frame(width: 60, height: 60)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        } placeholder: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .frame(width: 60, height: 60)
+                                .foregroundStyle(Color(.systemGray5))
+                        }
+                        
+                        // --- Text ---
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(article.title)
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                                .lineLimit(2) // <-- 2. "ДОПИЛ" (як радив друг)
+                            
+                            Text(article.source.uppercased())
+                                .font(.caption.bold())
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(8) // "Затишний" внутрішній відступ
+                .background(Color(.secondarySystemBackground)) // Використовуємо "чистий" колір
+                .cornerRadius(16) 
             }
-            
-            
-            VStack(alignment: .leading, spacing: 6) {
-                Text(article.title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                    .lineLimit(3)
-                
-                Text(article.source.uppercased())
-                    .font(.caption.bold())
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 8)
     }
-}
+
 
 
 struct SafariView: UIViewControllerRepresentable {
