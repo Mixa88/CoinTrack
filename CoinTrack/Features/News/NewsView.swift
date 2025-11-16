@@ -6,81 +6,87 @@
 //
 
 
-// NewsView.swift
 import SwiftUI
 
 struct NewsView: View {
     
+    // 1. We create the "brain" for this screen
     @StateObject private var viewModel = NewsViewModel()
     
     var body: some View {
-        NavigationStack {
-            
-            ZStack {
-                if viewModel.isLoading {
-                    // --- Loading Skeletons ---
-                    List {
-                        ForEach(0..<10) { _ in
-                            CoinRowSkeletonView()
-                                .listRowSeparator(.hidden)
-                                .listRowBackground(Color.clear)
-                        }
-                    }
-                    .listStyle(.plain)
+            NavigationStack {
                 
-                } else {
-                    // --- 3. The real data ---
-                    List(viewModel.articles) { article in
-                        
-                        // We link to the article URL
-                        if let url = article.articleURL {
-                            Link(destination: url) {
-                                newsRow(article: article) // Use our "cozy" helper
+                ZStack { // --- The main ZStack ---
+                    // --- A. LOADING STATE (SKELETONS) ---
+                    if viewModel.isLoading {
+                        List {
+                            ForEach(0..<10) { _ in
+                                CoinRowSkeletonView()
+                                    .listRowSeparator(.hidden)
+                                    .listRowBackground(Color.clear)
                             }
                         }
-                    }
-                    .listStyle(.plain)
-                    .refreshable {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        await viewModel.fetchNews()
-                    }
-                }
-                
-                // --- Error Overlay ---
-                if let errorMessage = viewModel.errorMessage {
-                    VStack(spacing: 12) {
-                        Image(systemName: "wifi.slash")
-                            .font(.system(size: 36))
-                        Text("Failed to load news")
-                            .font(.headline)
-                        
-                        Text(errorMessage)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(3)
-                        
-                        Button("Retry") {
-                            Task { await viewModel.fetchNews() }
+                        .listStyle(.plain)
+                    
+                    // --- B. LOADED STATE (CONTENT) ---
+                    } else {
+                        List { // Only the news section
+                            Section {
+                                ForEach(viewModel.articles) { article in
+                                    if let url = article.articleURL {
+                                        Link(destination: url) {
+                                            newsRow(article: article)
+                                        }
+                                    } else {
+                                        newsRow(article: article)
+                                    }
+                                }
+                            }
+                        } // --- End of List ---
+                        .listStyle(.plain)
+                        .refreshable {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            await viewModel.fetchNews()
                         }
-                        .buttonStyle(.bordered)
-                        .tint(.blue)
                     }
-                    .padding()
-                    .background(.ultraThinMaterial)
-                    .cornerRadius(16)
-                }
-            } // --- End of ZStack
-            .navigationTitle("News")
+                    
+                    // --- C. THE DISCLAIMER (ALWAYS VISIBLE, AT THE BOTTOM) ---
+                    // We're wrapping it in a VStack with a Spacer to push it to the bottom
+                    VStack {
+                        Spacer() // Pushes the disclaimer to the bottom
+                        VStack(spacing: 4) {
+                            Text("News is automatically sourced from the CryptoCompare News API.") // TODO: Localize
+                            Text("CoinTrack does not create, edit, or verify external content.") // TODO: Localize
+                        }
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 16)
+                        .background(.ultraThinMaterial) // Your requested semi-transparent background
+                    }
+                    
+                    // --- D. ERROR OVERLAY ---
+                    if let errorMessage = viewModel.errorMessage {
+                        VStack(spacing: 12) {
+                            // ... (Your existing error overlay code) ...
+                        }
+                        .padding()
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(16)
+                        .padding(.horizontal, 40)
+                        .transition(.scale.combined(with: .opacity))
+                    }
+                } // --- End of main ZStack
+                .navigationTitle("News") // TODO: Localize
+            }
         }
-    }
     
-    // --- 6. "COZY" NEWS ROW ---
-    // We now display the image and the source name
+    // --- "COZY" NEWS ROW (HELPER VIEW) ---
     @ViewBuilder
     private func newsRow(article: NewsArticle) -> some View {
         HStack(spacing: 12) {
             // --- 1. Image ---
-            AsyncImage(url: URL(string: article.imageUrl)) { image in
+            AsyncImage(url: article.fullImageURL) { image in
                 image.resizable()
                     .scaledToFill()
                     .frame(width: 60, height: 60)
@@ -96,9 +102,9 @@ struct NewsView: View {
                 Text(article.title)
                     .font(.headline)
                     .foregroundStyle(.primary)
-                    .lineLimit(3) // Limit to 3 lines
+                    .lineLimit(3)
                 
-                Text(article.source.uppercased()) // "CNN", "CoinTelegraph"
+                Text(article.source.uppercased())
                     .font(.caption.bold())
                     .foregroundStyle(.secondary)
             }
