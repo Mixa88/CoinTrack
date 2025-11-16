@@ -31,6 +31,8 @@ struct MainTabView: View {
                     }
             }
             .tint(.blue)
+            .contentShape(Rectangle()) // Makes the whole area "solid"
+            .allowsHitTesting(lockViewModel.isUnlocked) // DISABLES taps if locked
             
             // 4. The "Gate"
             // If we are NOT unlocked...
