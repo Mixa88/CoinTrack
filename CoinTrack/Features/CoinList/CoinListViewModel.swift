@@ -56,7 +56,10 @@ class CoinListViewModel: ObservableObject {
         Task {
             await fetchAllData() // Викликаємо "майстер-функцію"
         }
+        
+        setupSearchSubscription()
     }
+    
     
     func setup(modelContext: ModelContext) {
         // "Вмикаємо" SwiftData, коли View готовий
@@ -144,6 +147,22 @@ class CoinListViewModel: ObservableObject {
         }
     }
     
+    /// Sets up a subscription to the searchText property
+    private func setupSearchSubscription() {
+        $searchText
+            // Wait 250ms after the user stops typing
+            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
+            // We don't need to do anything with the text,
+            // because our `coins` computed property
+            // *already* filters based on `searchText`.
+            // We just need to "trigger" a refresh.
+            .sink(receiveValue: { [weak self] _ in
+                // This just makes SwiftUI re-evaluate the `coins` property
+                self?.objectWillChange.send()
+            })
+            .store(in: &cancellables)
+    }
+    
     
     private func checkAlerts() {
         let portfolioCoins = allCoins.filter { portfolioCoinIDs.contains($0.id) }
@@ -164,6 +183,9 @@ class CoinListViewModel: ObservableObject {
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: coin.id, content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request)
+
+        Task.detached(priority: .background) {
+            try? await UNUserNotificationCenter.current().add(request)
+        }
     }
 }

@@ -57,3 +57,22 @@ extension Double {
         return self.formatted(.number.precision(.fractionLength(2))) + "%"
     }
 }
+
+extension String {
+    
+    /// Removes HTML tags from a string.
+    /// ```
+    /// Example: "<p>Hello</p> <strong>World</strong>" -> "Hello World"
+    /// ```
+    func stripHTML() -> String {
+        // This is a simple regex to find and replace
+        // anything that looks like an HTML tag (<...>)
+        // and replace it with a space (to avoid "HelloWord").
+        return self.replacingOccurrences(of: "<[^>]+>",
+                                         with: " ", // Use a space
+                                         options: .regularExpression,
+                                         range: nil)
+                   // Also clean up extra whitespace
+                   .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}

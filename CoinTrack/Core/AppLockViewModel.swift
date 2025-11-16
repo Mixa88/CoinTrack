@@ -27,13 +27,13 @@ class AppLockViewModel: ObservableObject {
     func authenticate() {
             let context = LAContext()
             var error: NSError?
-            let reason = "Please authenticate to unlock your portfolio." // TODO: Localize
+            let reason = "Please authenticate to unlock your portfolio."
 
             // 1. Check if we *can* evaluate
-            if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
                 
                 // 2. YES, we can (this will run on a REAL device)
-                context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { [weak self] success, authenticationError in
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { [weak self] success, authenticationError in
                     
                     DispatchQueue.main.async {
                         if success {

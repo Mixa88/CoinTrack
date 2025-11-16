@@ -19,6 +19,7 @@ class SpotlightService {
     @AppStorage("spotlight_last_update") private var lastUpdateDate: TimeInterval?
     
     // 4. The main function our ViewModel will call
+    @MainActor
     func getSpotlightCoin(from allCoins: [Coin]) -> Coin? {
         
         // 5. Check if we need to update the coin

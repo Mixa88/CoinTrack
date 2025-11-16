@@ -50,7 +50,9 @@ struct NewsArticle: Codable, Identifiable {
         self.title = try container.decodeIfPresent(String.self, forKey: .title) ?? "No Title Provided"
         self.url = try container.decodeIfPresent(String.self, forKey: .url) ?? ""
         self.source = try container.decodeIfPresent(String.self, forKey: .source) ?? "Unknown Source"
-        self.imageUrl = try container.decodeIfPresent(String.self, forKey: .imageUrl)
+        
+        let rawUrl = try container.decodeIfPresent(String.self, forKey: .imageUrl)
+        self.imageUrl = rawUrl?.trimmingCharacters(in: .whitespacesAndNewlines)
         self.publishedOn = try container.decodeIfPresent(TimeInterval.self, forKey: .publishedOn)
     }
 
