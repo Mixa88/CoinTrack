@@ -47,8 +47,9 @@ class CoinDetailViewModel: ObservableObject {
             let (coinDetail, coinFullDetail) = try await (fetchChartTask, fetchDescriptionTask)
             
             // 6. Update our properties
-            self.chartData = coinDetail.prices.map { $0[1] } // Process chart data
-            self.description = coinFullDetail?.description?.englishDescription // Process description
+            self.chartData = coinDetail.prices.compactMap { $0.count > 1 ? $0[1] : nil } // Process chart data
+            let dirtyDescription = coinFullDetail?.description?.englishDescription
+            self.description = dirtyDescription?.stripHTML() ?? "No description available."
             
             self.isLoading = false
             print("Successfully fetched all detail data.")
