@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 class CoinDetailViewModel: ObservableObject {
@@ -49,7 +50,8 @@ class CoinDetailViewModel: ObservableObject {
             // 6. Update our properties
             self.chartData = coinDetail.prices.compactMap { $0.count > 1 ? $0[1] : nil } // Process chart data
             let dirtyDescription = coinFullDetail?.description?.englishDescription
-            self.description = dirtyDescription?.stripHTML() ?? "No description available."
+            let fallback = NSLocalizedString("detail.about.no_description", comment: "")
+            self.description = dirtyDescription?.stripHTML() ?? fallback
             
             self.isLoading = false
             print("Successfully fetched all detail data.")

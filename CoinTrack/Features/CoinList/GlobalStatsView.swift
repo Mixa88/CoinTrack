@@ -9,36 +9,37 @@ import SwiftUI
 
 struct GlobalStatsView: View {
     
-    
     let globalData: GlobalData
     let fearGreedData: FearGreedData?
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                
-                
-                StatisticItemView(
-                    title: "Market Cap",
-                    value: (globalData.marketCapUSD).toFormattedString()
-                )
+            
+            // --- 1. SET SPACING TO 12 (Friend's suggestion) ---
+            HStack(spacing: 12) {
                 
                 StatisticItemView(
-                    title: "Total Volume",
-                    value: (globalData.volumeUSD).toFormattedString()
-                )
-                
-                StatisticItemView(
-                    title: "BTC Dominance",
-                    value: (globalData.btcDominance).toDominanceString()
-                )
-                
-              
+                        
+                        title: NSLocalizedString("detail.statistics.market_cap", comment: ""),
+                        value: (globalData.marketCapUSD).toFormattedString()
+                    )
+                    
+                    StatisticItemView(
+                        
+                        title: NSLocalizedString("detail.statistics.total_volume", comment: ""),
+                        value: (globalData.volumeUSD).toFormattedString()
+                    )
+                    
+                    StatisticItemView(
+                        
+                        title: NSLocalizedString("detail.statistics.btc_dominance_short", comment: ""),
+                        value: (globalData.btcDominance).toDominanceString()
+                    )
                 
                 if let fearGreed = fearGreedData {
                     StatisticItemView(
-                        title: fearGreed.valueClassification, // "Fear", "Greed" etc.
-                        value: fearGreed.value // "42", "69" etc.
+                        title: fearGreed.valueClassification,
+                        value: fearGreed.value
                     )
                 }
                 
@@ -49,7 +50,7 @@ struct GlobalStatsView: View {
     }
 }
 
-// --- 4. Helper View for each item ---
+// --- 2. "UPGRADED" HELPER VIEW ---
 struct StatisticItemView: View {
     let title: String
     let value: String
@@ -63,8 +64,11 @@ struct StatisticItemView: View {
                 .font(.subheadline)
                 .fontWeight(.semibold)
         }
+        // --- 3. SET A MINIMUM WIDTH TO EQUALIZE ---
+        .frame(minWidth: 100) // Змушуємо всі картки бути "широкими"
         .padding(12)
-        .background(Color(.systemGray6))
+        // --- 4. USE .ultraThinMaterial (Friend's suggestion) ---
+        .background(.ultraThinMaterial) // "Затишне" розмиття
         .cornerRadius(12)
     }
 }

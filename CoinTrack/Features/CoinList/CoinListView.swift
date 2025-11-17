@@ -24,29 +24,29 @@ struct CoinListView: View {
         NavigationStack {
             VStack(spacing: 12) {
                 
-                // --- 1. NEW: "COIN OF THE DAY" SPOTLIGHT ---
-                // We show this card IF the spotlight coin exists
+                // --- 1. "COIN OF THE DAY" SPOTLIGHT ---
                 if let coin = viewModel.spotlightCoin {
                     spotlightView(coin: coin)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                 }
                 
-                // --- 2. Global stats (as before) ---
+                // --- 2. Global stats ---
                 if let global = viewModel.globalData {
                     GlobalStatsView(globalData: global, fearGreedData: viewModel.fearGreedData)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                         .animation(.easeOut(duration: 0.28), value: (viewModel.globalData != nil))
                 }
                 
-                // --- 3. Segmented picker (as before) ---
+                // --- 3. Segmented picker ---
                 Picker("Select Tab", selection: $viewModel.selectedTab) {
-                    Text("All Coins").tag(CoinListViewModel.ListTab.allCoins)
-                    Text("Portfolio").tag(CoinListViewModel.ListTab.portfolio)
+                    // 💡 ИЗМЕНЕНО: Заменены "All Coins" / "Portfolio" на ключи
+                    Text("prices.tab.all_coins").tag(CoinListViewModel.ListTab.allCoins)
+                    Text("prices.tab.portfolio").tag(CoinListViewModel.ListTab.portfolio)
                 }
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 
-                // --- 4. Main content area (as before) ---
+                // --- 4. Main content area ---
                 ZStack {
                     
                     // --- A. LOADING STATE (SKELETONS) ---
@@ -84,8 +84,11 @@ struct CoinListView: View {
                                     Button {
                                         viewModel.updatePortfolio(coin: coin)
                                     } label: {
-                                        Label(viewModel.coinIsInPortfolio(coin: coin) ? "Remove from Portfolio" : "Add to Portfolio",
-                                              systemImage: viewModel.coinIsInPortfolio(coin: coin) ? "star.slash.fill" : "star.fill")
+                                        // 💡 ИЗМЕНЕНО: Динамический выбор ключа для Label
+                                        let labelKey = viewModel.coinIsInPortfolio(coin: coin) ? "prices.context.remove" : "prices.context.add"
+                                        let systemImage = viewModel.coinIsInPortfolio(coin: coin) ? "star.slash.fill" : "star.fill"
+                                        
+                                        Label(labelKey, systemImage: systemImage)
                                     }
                                 } preview: {
                                     CoinQuickStatsView(coin: coin)
@@ -109,9 +112,12 @@ struct CoinListView: View {
                             Image(systemName: "wifi.slash")
                                 .font(.system(size: 36))
                                 .foregroundStyle(.gray)
-                            Text("Something went wrong")
+                            
+                            // 💡 ИЗМЕНЕНО: Заменен "Something went wrong" на ключ
+                            Text("prices.error.title")
                                 .font(.headline)
-                            Text(errorMessage)
+                            
+                            Text(errorMessage) // Это OK, это динамическая ошибка
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
@@ -120,11 +126,12 @@ struct CoinListView: View {
                             Button {
                                 Task { await viewModel.refreshAllData() }
                             } label: {
-                                Text("Retry")
+                                // 💡 ИЗМЕНЕНО: Заменен "Retry" на ключ
+                                Text("common.retry")
                                     .fontWeight(.bold)
                             }
                             .buttonStyle(.bordered)
-                            .tint(.blue) // Or your BrandGreen
+                            .tint(.blue)
                         }
                         .padding()
                         .background(.ultraThinMaterial)
@@ -139,9 +146,13 @@ struct CoinListView: View {
                             Image(systemName: "star")
                                 .font(.system(size: 36))
                                 .foregroundStyle(.gray)
-                            Text("Your portfolio is empty")
+                            
+                            // 💡 ИЗМЕНЕНО: Заменен "Your portfolio is empty" на ключ
+                            Text("prices.empty_portfolio.title")
                                 .font(.headline)
-                            Text("Tap the ⭐️ next to a coin to add it here.")
+                            
+                            // 💡 ИЗМЕНЕНО: Заменен субтитр на ключ
+                            Text("prices.empty_portfolio.subtitle")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
@@ -154,8 +165,13 @@ struct CoinListView: View {
                 .animation(.default, value: viewModel.isLoading)
                 
             } // --- End of VStack
-            .navigationTitle("Live Prices")
-            .searchable(text: $viewModel.searchText, prompt: "Search by name or symbol...")
+            
+            // 💡 ИЗМЕНЕНО: Заменен "Live Prices" на ключ
+            .navigationTitle("prices.title")
+            
+            // 💡 ИЗМЕНЕНО: Заменен prompt на ключ (требует Text())
+            .searchable(text: $viewModel.searchText, prompt: Text("common.search.prompt"))
+            
             .onAppear {
                 viewModel.setup(modelContext: modelContext)
             }
@@ -168,69 +184,67 @@ struct CoinListView: View {
         }
     }
     
-    // --- 5. NEW: HELPER VIEW FOR THE SPOTLIGHT CARD ---
+    // --- 5. HELPER VIEW FOR THE SPOTLIGHT CARD ---
     @ViewBuilder
         private func spotlightView(coin: Coin) -> some View {
             
-            // --- 1. ADD THIS LOGIC ---
-            // Get the price change (or 0 if nil)
-            let priceChange = coin.priceChangePercentage24H ?? 0
-            
-            // Determine the background color
-            let bgColor: Color = {
-                if priceChange > 0 {
-                    return .green.opacity(0.1) // "Cozy" green
-                } else if priceChange < 0 {
-                    return .red.opacity(0.1)   // "Cozy" red
-                } else {
-                    return Color(.systemGray6) // Neutral gray
-                }
-            }()
-            // --- END OF LOGIC ---
-
-            VStack(alignment: .leading, spacing: 10) {
-                // Header
-                HStack {
-                    Text("🔥 Coin of the Day")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    Spacer()
-                    
-                    Button {
-                        withAnimation {
-                            viewModel.spotlightCoin = nil
-                        }
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.caption.bold())
-                            .foregroundStyle(.secondary)
-                            .padding(8)
-                            .background(Circle().fill(Color(.systemGray5)))
-                    }
-                }
-                
-                Divider()
-                
-                // The Coin Row
-                NavigationLink(destination: CoinDetailView(coin: coin)) {
-                    HStack(spacing: 12) {
-                        CoinRowView(coin: coin)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .tint(.primary)
+        // ... (логика цвета фона не меняется) ...
+        let priceChange = coin.priceChangePercentage24H ?? 0
+        let bgColor: Color = {
+            if priceChange > 0 {
+                return .green.opacity(0.1) // "Cozy" green
+            } else if priceChange < 0 {
+                return .red.opacity(0.1)   // "Cozy" red
+            } else {
+                return Color(.systemGray6) // Neutral gray
             }
-            .padding()
-            // --- 2. UPDATE THE BACKGROUND ---
-            .background(bgColor) // <-- Use our new dynamic color
-            .cornerRadius(16)
-            .padding(.horizontal)
-            // 3. Add a "cozy" animation when the color changes
-            .animation(.easeInOut, value: bgColor)
+        }()
+
+        VStack(alignment: .leading, spacing: 10) {
+            // Header
+            HStack {
+                // 💡 ИЗМЕНЕНО: Заменен "Coin of the Day" на ключ
+                Text("prices.spotlight.title")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                
+                Spacer()
+                
+                Button {
+                    withAnimation {
+                        viewModel.spotlightCoin = nil
+                    }
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.caption.bold())
+                        .foregroundStyle(.secondary)
+                        .padding(8)
+                        .background(Circle().fill(Color(.systemGray5)))
+                }
+                // 💡 ДОБАВЛЕНО: accessibilityLabel для кнопки "X"
+                .accessibilityLabel("prices.spotlight.dismiss")
+            }
+            
+            Divider()
+            
+            // The Coin Row
+            NavigationLink(destination: CoinDetailView(coin: coin)) {
+                HStack(spacing: 12) {
+                    CoinRowView(coin: coin)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .tint(.primary)
         }
+        .padding()
+        .background(bgColor)
+        .cornerRadius(16)
+        .padding(.horizontal)
+        .animation(.easeInOut, value: bgColor)
     }
+}
 
 // MARK: - Preview
 #Preview {

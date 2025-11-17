@@ -25,5 +25,8 @@ struct StatisticRowView: View {
 }
 
 #Preview {
-    StatisticRowView(title: "Market Cap", value: "2.0T")
+    StatisticRowView(
+        title: NSLocalizedString("detail.statistics.market_cap", comment: ""), // <- Ключ
+        value: "2.0T"
+    )
 }

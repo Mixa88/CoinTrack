@@ -18,15 +18,21 @@ struct CoinTrackWidgetControl: ControlWidget {
             provider: Provider()
         ) { value in
             ControlWidgetToggle(
-                "Start Timer",
+                
+                .init("widget.control.start_timer"),
                 isOn: value.isRunning,
                 action: StartTimerIntent(value.name)
             ) { isRunning in
-                Label(isRunning ? "On" : "Off", systemImage: "timer")
+                Label(
+                   
+                    isRunning ? .init("widget.control.on") : .init("widget.control.off"),
+                    systemImage: "timer"
+                )
             }
         }
-        .displayName("Timer")
-        .description("A an example control that runs a timer.")
+        
+        .displayName(.init("widget.control.timer_name"))
+        .description(.init("widget.control.timer_description"))
     }
 }
 
@@ -49,19 +55,24 @@ extension CoinTrackWidgetControl {
 }
 
 struct TimerConfiguration: ControlConfigurationIntent {
-    static let title: LocalizedStringResource = "Timer Name Configuration"
+    
+    static let title: LocalizedStringResource = .init("widget.control.config.title")
 
-    @Parameter(title: "Timer Name", default: "Timer")
+    
+    @Parameter(title: .init("widget.control.config.param_name"), default: "Timer")
     var timerName: String
 }
 
 struct StartTimerIntent: SetValueIntent {
-    static let title: LocalizedStringResource = "Start a timer"
+    
+    static let title: LocalizedStringResource = .init("widget.control.intent.start_timer.title")
 
-    @Parameter(title: "Timer Name")
+    
+    @Parameter(title: .init("widget.control.intent.param_name"))
     var name: String
 
-    @Parameter(title: "Timer is running")
+    
+    @Parameter(title: .init("widget.control.intent.param_running"))
     var value: Bool
 
     init() {}
