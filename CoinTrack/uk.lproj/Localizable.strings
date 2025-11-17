@@ -23,7 +23,7 @@
 "prices.empty_portfolio.title" = "Ваше портфоліо порожнє";
 "prices.empty_portfolio.subtitle" = "Натисніть ⭐️ біля монети, щоб додати її сюди.";
 "prices.error.title" = "Щось пішло не так";
-"prices.error.subtitle" = "Операцію не вдалося завершити.";
+"prices.error.subtitle" = "Сервер API тимчасово перевантажений. Будь ласка, зачекайте хвилинку та спробуйте ще раз.";
 "prices.context.add" = "Додати в Портфоліо";
 "prices.context.remove" = "Видалити з Портфоліо";
 
@@ -87,5 +87,6 @@
 "widget.control.intent.start_timer.title" = "Запустити таймер";
 "widget.control.intent.param_name" = "Назва Таймера";
 "widget.control.intent.param_running" = "Таймер запущено";
+"widget.stats.market_cap" = "Рин. Кап.";
 
 

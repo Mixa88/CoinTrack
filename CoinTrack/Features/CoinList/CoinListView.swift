@@ -39,7 +39,7 @@ struct CoinListView: View {
                 
                 // --- 3. Segmented picker ---
                 Picker("Select Tab", selection: $viewModel.selectedTab) {
-                    // 💡 ИЗМЕНЕНО: Заменены "All Coins" / "Portfolio" на ключи
+                    
                     Text("prices.tab.all_coins").tag(CoinListViewModel.ListTab.allCoins)
                     Text("prices.tab.portfolio").tag(CoinListViewModel.ListTab.portfolio)
                 }
@@ -60,8 +60,8 @@ struct CoinListView: View {
                         }
                         .listStyle(.plain)
                         .transition(.opacity.animation(.easeIn(duration: 0.2)))
-                    
-                    // --- B. LOADED STATE (CONTENT) ---
+                        
+                        // --- B. LOADED STATE (CONTENT) ---
                     } else {
                         List(viewModel.coins) { coin in
                             NavigationLink(destination: CoinDetailView(coin: coin)) {
@@ -113,7 +113,7 @@ struct CoinListView: View {
                                 .font(.system(size: 36))
                                 .foregroundStyle(.gray)
                             
-                            // 💡 ИЗМЕНЕНО: Заменен "Something went wrong" на ключ
+                            
                             Text("prices.error.title")
                                 .font(.headline)
                             
@@ -124,15 +124,24 @@ struct CoinListView: View {
                                 .lineLimit(3)
                             
                             Button {
-                                Task { await viewModel.refreshAllData() }
+                                Task { await viewModel.retryRefresh() }
                             } label: {
-                                // 💡 ИЗМЕНЕНО: Заменен "Retry" на ключ
-                                Text("common.retry")
-                                    .fontWeight(.bold)
+                                
+                                if viewModel.isRetrying {
+                                    ProgressView()
+                                        .frame(height: 20)
+                                } else {
+                                    Text("common.retry")
+                                        .fontWeight(.bold)
+                                }
                             }
+                            // ✅ ИСПРАВЛЕНО: Модификаторы ПЕРЕМЕЩЕНЫ сюда (применяются к Button)
                             .buttonStyle(.bordered)
                             .tint(.blue)
-                        }
+                            .disabled(viewModel.isRetrying)
+                            
+                        } // <-- 'VStack' закрылся
+                        // ✅ ИСПРАВЛЕНО: Модификаторы ПЕРЕМЕЩЕНЫ сюда (применяются к VStack)
                         .padding()
                         .background(.ultraThinMaterial)
                         .cornerRadius(16)
@@ -182,13 +191,14 @@ struct CoinListView: View {
             .padding(.top)
             .background(Color(.systemBackground).ignoresSafeArea())
         }
-    }
+        
+    } // ✅ ИСПРАВЛЕНО: Добавлена скобка для 'var body'
     
     // --- 5. HELPER VIEW FOR THE SPOTLIGHT CARD ---
     @ViewBuilder
-        private func spotlightView(coin: Coin) -> some View {
-            
-        // ... (логика цвета фона не меняется) ...
+    private func spotlightView(coin: Coin) -> some View {
+        
+        
         let priceChange = coin.priceChangePercentage24H ?? 0
         let bgColor: Color = {
             if priceChange > 0 {
@@ -199,11 +209,11 @@ struct CoinListView: View {
                 return Color(.systemGray6) // Neutral gray
             }
         }()
-
+        
         VStack(alignment: .leading, spacing: 10) {
             // Header
             HStack {
-                // 💡 ИЗМЕНЕНО: Заменен "Coin of the Day" на ключ
+                
                 Text("prices.spotlight.title")
                     .font(.headline)
                     .fontWeight(.bold)
@@ -251,4 +261,3 @@ struct CoinListView: View {
     CoinListView()
         .modelContainer(for: PortfolioEntity.self, inMemory: true)
 }
-

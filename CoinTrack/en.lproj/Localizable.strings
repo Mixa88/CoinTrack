@@ -23,7 +23,7 @@
 "prices.empty_portfolio.title" = "Your portfolio is empty";
 "prices.empty_portfolio.subtitle" = "Tap the ⭐️ next to a coin to add it here.";
 "prices.error.title" = "Something went wrong";
-"prices.error.subtitle" = "The operation couldn’t be completed.";
+"prices.error.subtitle" = "The API server is temporarily overloaded. Please wait a moment and try again.";
 "prices.context.add" = "Add to Portfolio";
 "prices.context.remove" = "Remove from Portfolio";
 
@@ -87,5 +87,6 @@
 "widget.control.intent.start_timer.title" = "Start a timer";
 "widget.control.intent.param_name" = "Timer Name";
 "widget.control.intent.param_running" = "Timer is running";
+"widget.stats.market_cap" = "Market Cap";
 
 

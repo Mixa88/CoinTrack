@@ -88,23 +88,39 @@ struct CoinTrackWidgetEntryView : View {
                 
                 Text(entry.btcPrice.toCurrencyString())
                     .font(.title2.bold())
+                    .minimumScaleFactor(0.7)
                     .foregroundStyle(.primary)
             }
             
             Spacer()
             
             // --- STATISTICS ---
-            VStack(alignment: .leading, spacing: 4) {
-                StatisticRowView(
-                   
-                    title: NSLocalizedString("detail.statistics.market_cap", comment: ""),
-                    value: entry.marketCap.toFormattedString()
-                )
-                StatisticRowView(
+            HStack {
+                
+                VStack(alignment: .leading) {
+                    Text(entry.marketCap.toFormattedString())
+                        .font(.caption.bold())
+                        .minimumScaleFactor(0.8)
                     
-                    title: NSLocalizedString("detail.statistics.btc_dominance_short", comment: ""),
-                    value: entry.btcDominance.toDominanceString()
-                )
+                    Text("widget.stats.market_cap")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+                
+                Spacer()
+                
+                
+                VStack(alignment: .trailing) {
+                    Text(entry.btcDominance.toDominanceString())
+                        .font(.caption.bold())
+                        .minimumScaleFactor(0.8)
+                    
+                    Text("detail.statistics.btc_dominance_short")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1) // 
+                }
             }
         }
         .padding()
