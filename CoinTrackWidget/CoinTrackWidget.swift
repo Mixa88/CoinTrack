@@ -9,75 +9,63 @@ import WidgetKit
 import SwiftUI
 import SwiftData
 
-
 struct Provider: TimelineProvider {
     
-    
     var modelContainer: ModelContainer = SharedModelContainer.sharedModelContainer
-    
     
     let coinService = CoinDataService.shared
     let globalService = GlobalDataService.shared
 
-    
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(),
-                    btcPrice: 100000.0,
-                    marketCap: 3.5e12, // 3.5T
-                    btcDominance: 57.5)
+        SimpleEntry(
+            date: Date(),
+            btcPrice: 100000.0,
+            marketCap: 3.5e12,
+            btcDominance: 57.5
+        )
     }
 
-  
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(),
-                                btcPrice: 100000.0,
-                                marketCap: 3.5e12,
-                                btcDominance: 57.5)
+        let entry = SimpleEntry(
+            date: Date(),
+            btcPrice: 100000.0,
+            marketCap: 3.5e12,
+            btcDominance: 57.5
+        )
         completion(entry)
     }
 
-    
-    
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        
-        
+
         Task {
             do {
-                
                 async let coinsTask = coinService.fetchCoins()
                 async let globalTask = globalService.fetchGlobalData()
-                
-                
+
                 let (coins, globalData) = try await (coinsTask, globalTask)
-                
-                
+
                 let btc = coins.first(where: { $0.id == "bitcoin" })
                 let btcPrice = btc?.currentPrice ?? 0
                 let marketCap = globalData?.marketCapUSD ?? 0
                 let btcDominance = globalData?.btcDominance ?? 0
-                
-                
-                let entry = SimpleEntry(date: Date(),
-                                        btcPrice: btcPrice,
-                                        marketCap: marketCap,
-                                        btcDominance: btcDominance)
-                
-                
-                let nextUpdate = Date().addingTimeInterval(60 * 15) // Оновити через 15 хвилин
-                let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
-                completion(timeline)
-                
+
+                let entry = SimpleEntry(
+                    date: Date(),
+                    btcPrice: btcPrice,
+                    marketCap: marketCap,
+                    btcDominance: btcDominance
+                )
+
+                let nextUpdate = Date().addingTimeInterval(60 * 15)
+                completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
+
             } catch {
-                
-                print("Error fetching widget data: \(error)")
                 let entry = SimpleEntry(date: Date(), btcPrice: 0, marketCap: 0, btcDominance: 0)
-                let timeline = Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(60 * 5)))
-                completion(timeline)
+                completion(Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(60 * 5))))
             }
         }
     }
 }
-
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
@@ -86,18 +74,18 @@ struct SimpleEntry: TimelineEntry {
     let btcDominance: Double
 }
 
-
 struct CoinTrackWidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 8) {
             
+            // --- BTC TITLE + PRICE ---
             VStack(alignment: .leading) {
-                Text("Bitcoin (BTC)")
+                Text("widget.btc")                     
                     .font(.caption.bold())
                     .foregroundStyle(.secondary)
+                
                 Text(entry.btcPrice.toCurrencyString())
                     .font(.title2.bold())
                     .foregroundStyle(.primary)
@@ -105,16 +93,23 @@ struct CoinTrackWidgetEntryView : View {
             
             Spacer()
             
-            
+            // --- STATISTICS ---
             VStack(alignment: .leading, spacing: 4) {
-                StatisticRowView(title: "Market Cap", value: entry.marketCap.toFormattedString())
-                StatisticRowView(title: "BTC Dominance", value: entry.btcDominance.toDominanceString())
+                StatisticRowView(
+                   
+                    title: NSLocalizedString("detail.statistics.market_cap", comment: ""),
+                    value: entry.marketCap.toFormattedString()
+                )
+                StatisticRowView(
+                    
+                    title: NSLocalizedString("detail.statistics.btc_dominance_short", comment: ""),
+                    value: entry.btcDominance.toDominanceString()
+                )
             }
         }
         .padding()
     }
 }
-
 
 @main
 struct CoinTrackWidget: Widget {
@@ -126,15 +121,15 @@ struct CoinTrackWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
                 .modelContainer(SharedModelContainer.sharedModelContainer)
         }
-        .configurationDisplayName("CoinTrack Summary") // TODO: Localize
-        .description("Shows live Bitcoin price and market stats.") // TODO: Localize
-        .supportedFamilies([.systemSmall]) // Ми підтримуємо тільки малий віджет
+        .configurationDisplayName(Text("widget.display_name"))
+        .description(Text("widget.description"))
+        .supportedFamilies([.systemSmall])
     }
 }
-
 
 #Preview(as: .systemSmall) {
     CoinTrackWidget()
 } timeline: {
     SimpleEntry(date: Date(), btcPrice: 101000.0, marketCap: 3.5e12, btcDominance: 57.5)
 }
+

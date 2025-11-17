@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 import SwiftData
-import UserNotifications // Потрібен для сповіщень
+import UserNotifications 
 
 @MainActor
 class CoinListViewModel: ObservableObject {
@@ -176,11 +176,19 @@ class CoinListViewModel: ObservableObject {
     
     private func sendNotification(for coin: Coin, change: Double) {
         let content = UNMutableNotificationContent()
-        content.title = "\(coin.name) Price Alert"
-        let direction = change > 0 ? "increased" : "decreased"
-        content.body = "\(coin.symbol.uppercased()) has \(direction) by \(change.toPercentString()) in 24h!"
+        
+        // 1. Готовим ключи
+        let titleFormat = NSLocalizedString("notification.price_alert.title", comment: "Notification title. %@ = coin name")
+        let directionKey = change > 0 ? "notification.price_alert.direction_increased" : "notification.price_alert.direction_decreased"
+        let direction = NSLocalizedString(directionKey, comment: "Word for 'increased' or 'decreased'")
+        let bodyFormat = NSLocalizedString("notification.price_alert.body", comment: "Notification body. 1st %@ = symbol, 2nd %@ = direction, 3rd %@ = percent change")
+        
+        // 2. Создаем строки с параметрами
+        content.title = String(format: titleFormat, coin.name)
+        content.body = String(format: bodyFormat, coin.symbol.uppercased(), direction, change.toPercentString())
         content.sound = .default
         
+        // ... (остальная часть функции не меняется) ...
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: coin.id, content: content, trigger: trigger)
 

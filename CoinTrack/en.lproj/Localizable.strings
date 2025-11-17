@@ -1,0 +1,91 @@
+/* Localizable.strings (English) */
+
+//
+// MARK: - General
+//
+"common.retry" = "Retry";
+"common.search.prompt" = "Search by name or symbol...";
+
+//
+// MARK: - Main Tabs
+//
+"tab.prices" = "Prices";
+"tab.news" = "News";
+
+//
+// MARK: - Prices Tab (CoinList)
+//
+"prices.title" = "Live Prices";
+"prices.tab.all_coins" = "All Coins";
+"prices.tab.portfolio" = "Portfolio";
+"prices.spotlight.title" = "🔥 Coin of the Day";
+"prices.spotlight.dismiss" = "Dismiss";
+"prices.empty_portfolio.title" = "Your portfolio is empty";
+"prices.empty_portfolio.subtitle" = "Tap the ⭐️ next to a coin to add it here.";
+"prices.error.title" = "Something went wrong";
+"prices.error.subtitle" = "The operation couldn’t be completed.";
+"prices.context.add" = "Add to Portfolio";
+"prices.context.remove" = "Remove from Portfolio";
+
+//
+// MARK: - News Tab
+//
+"news.title" = "News";
+"news.error.title" = "Failed to load news";
+"news.disclaimer.line1" = "News is automatically sourced from the CryptoCompare News API.";
+"news.disclaimer.line2" = "CoinTrack does not create, edit, or verify external content.";
+
+//
+// MARK: - Detail View
+//
+"detail.chart.title" = "7-Day Chart";
+"detail.statistics.title" = "Statistics";
+"detail.statistics.market_cap" = "Market Cap";
+"detail.statistics.market_cap_rank" = "Market Cap Rank";
+"detail.statistics.high_24h" = "24h High";
+"detail.statistics.low_24h" = "24h Low";
+"detail.statistics.total_volume" = "Total Volume";
+"detail.about.title" = "About %@";
+"detail.about.no_description" = "No description available.";
+"detail.about.read_more" = "Read More";
+"detail.about.show_less" = "Show Less";
+
+//
+// MARK: - App Lock
+//
+"lock.title" = "CoinTrack is Locked";
+"lock.subtitle" = "Unlock with biometrics to continue.";
+"lock.button" = "Unlock Now";
+"lock.reason" = "Please authenticate to unlock your portfolio.";
+
+//
+// MARK: - Widget
+//
+"widget.display_name" = "CoinTrack Summary";
+"widget.description" = "Shows live Bitcoin price and market stats.";
+"widget.btc" = "Bitcoin (BTC)";
+"detail.statistics.btc_dominance_short" = "BTC Dominance";
+
+//
+// MARK: - Notifications
+//
+"notification.price_alert.title" = "%@ Price Alert";
+"notification.price_alert.direction_increased" = "increased";
+"notification.price_alert.direction_decreased" = "decreased";
+"notification.price_alert.body" = "%@ has %@ by %@ in 24h!";
+
+//
+// MARK: - Widget Control
+//
+"widget.control.start_timer" = "Start Timer";
+"widget.control.on" = "On";
+"widget.control.off" = "Off";
+"widget.control.timer_name" = "Timer";
+"widget.control.timer_description" = "A an example control that runs a timer.";
+"widget.control.config.title" = "Timer Name Configuration";
+"widget.control.config.param_name" = "Timer Name";
+"widget.control.intent.start_timer.title" = "Start a timer";
+"widget.control.intent.param_name" = "Timer Name";
+"widget.control.intent.param_running" = "Timer is running";
+
+

@@ -38,9 +38,21 @@ struct CoinQuickStatsView: View {
             Divider()
             
             // --- Stats ---
-            StatisticRowView(title: "Market Cap", value: (coin.marketCap ?? 0).toFormattedString())
-            StatisticRowView(title: "24h High", value: (coin.high24H ?? 0).toCurrencyString())
-            StatisticRowView(title: "24h Low", value: (coin.low24H ?? 0).toCurrencyString())
+            StatisticRowView(
+                    
+                    title: NSLocalizedString("detail.statistics.market_cap", comment: ""),
+                    value: (coin.marketCap ?? 0).toFormattedString()
+                )
+                StatisticRowView(
+                    
+                    title: NSLocalizedString("detail.statistics.high_24h", comment: ""),
+                    value: (coin.high24H ?? 0).toCurrencyString()
+                )
+                StatisticRowView(
+                    
+                    title: NSLocalizedString("detail.statistics.low_24h", comment: ""),
+                    value: (coin.low24H ?? 0).toCurrencyString()
+                )
         }
         .padding()
         .background(Color(.systemGray6))

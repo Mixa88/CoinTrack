@@ -7,6 +7,7 @@
 
 import Foundation
 import LocalAuthentication
+import SwiftUI
 
 @MainActor
 class AppLockViewModel: ObservableObject {
@@ -27,7 +28,7 @@ class AppLockViewModel: ObservableObject {
     func authenticate() {
             let context = LAContext()
             var error: NSError?
-            let reason = "Please authenticate to unlock your portfolio."
+        let reason = NSLocalizedString("lock.reason", comment: "")
 
             // 1. Check if we *can* evaluate
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {

@@ -20,46 +20,39 @@ struct CoinDetailView: View {
         _viewModel = StateObject(wrappedValue: CoinDetailViewModel(coin: coin))
     }
     
-    // --- 1. THE "CLEAN" BODY ---
-    // The main body is now simple and readable.
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 
-                // --- Header ---
                 headerView
                 
-                // --- Loading / Error / Content ---
                 if viewModel.isLoading {
                     ProgressView()
                         .padding(.top, 50)
                     
                 } else if viewModel.errorMessage != nil {
-                    Text("Failed to load data.")
+                    Text("news.error.title")
                         .foregroundStyle(.red)
                         .padding(.top, 50)
                     
                 } else {
-                    // --- All our cards in one VStack ---
                     cardsView
                 }
                 
                 Spacer()
                 
-            } // --- End of main VStack
+            }
             .padding()
             
-        } // --- End of ScrollView
+        }
         .navigationTitle(coin.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-// --- 2. WE BROKE THE UI INTO SMALL, "COZY" HELPERS ---
-
 extension CoinDetailView {
     
-    // --- Helper 1: The Header ---
+    // MARK: - Header
     private var headerView: some View {
         VStack(spacing: 8) {
             Text(coin.name)
@@ -72,7 +65,7 @@ extension CoinDetailView {
         .padding(.top, 8)
     }
     
-    // --- Helper 2: The Stack of Cards ---
+    // MARK: - Cards Stack
     private var cardsView: some View {
         VStack(spacing: 20) {
             chartCard
@@ -83,69 +76,82 @@ extension CoinDetailView {
         }
     }
     
-    // --- Helper 3: Chart Card ---
+    // MARK: - Chart Card
     private var chartCard: some View {
         VStack(alignment: .leading) {
-            Text("7-Day Chart")
+            Text("detail.chart.title")
                 .font(.headline)
+            
             Chart {
-                            ForEach(Array(viewModel.chartData.enumerated()), id: \.offset) { index, price in
-                                
-                                // --- 1. THE LINE (as before) ---
-                                LineMark(
-                                    x: .value("Date", index),
-                                    y: .value("Price", price)
-                                )
-                                // --- 2. ADD THIS (Thinner line) ---
-                                .lineStyle(.init(lineWidth: 2)) // Робимо лінію "чистішою"
-                                .foregroundStyle(coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red)
-                                
-                                // --- 3. ADD THIS (The gradient area) ---
-                                AreaMark(
-                                    x: .value("Date", index),
-                                    y: .value("Price", price)
-                                )
-                                // "Заливаємо" її градієнтом
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            (coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red).opacity(0.3),
-                                            .clear
-                                        ]),
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                            }
-                        }
-                        .chartXAxis(.hidden)
-                        .chartYAxis(.hidden)
-                        .frame(height: 60)
+                ForEach(Array(viewModel.chartData.enumerated()), id: \.offset) { index, price in
+                    
+                    LineMark(
+                        x: .value("Date", index),
+                        y: .value("Price", price)
+                    )
+                    .lineStyle(.init(lineWidth: 2))
+                    .foregroundStyle(coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red)
+                    
+                    AreaMark(
+                        x: .value("Date", index),
+                        y: .value("Price", price)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                (coin.priceChangePercentage24H ?? 0 >= 0 ? Color.green : Color.red).opacity(0.3),
+                                .clear
+                            ]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                }
+            }
+            .chartXAxis(.hidden)
+            .chartYAxis(.hidden)
+            .frame(height: 60)
         }
-        .asCard() // Use our custom card modifier
+        .asCard()
     }
     
-    // --- Helper 4: Statistics Card ---
+    // MARK: - Statistics Card
     private var statisticsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Statistics")
+            Text("detail.statistics.title")
                 .font(.headline)
             
             Divider()
             
-            StatisticRowView(title: "Market Cap", value: (coin.marketCap ?? 0).toFormattedString())
-            StatisticRowView(title: "Market Cap Rank", value: "#\(coin.marketCapRank ?? 0)")
-            StatisticRowView(title: "24h High", value: (coin.high24H ?? 0).toCurrencyString())
-            StatisticRowView(title: "24h Low", value: (coin.low24H ?? 0).toCurrencyString())
-            StatisticRowView(title: "Total Volume", value: (coin.totalVolume ?? 0).toFormattedString())
+            StatisticRowView(
+                title: NSLocalizedString("detail.statistics.market_cap", comment: ""),
+                value: (coin.marketCap ?? 0).toFormattedString()
+            )
+            StatisticRowView(
+                title: NSLocalizedString("detail.statistics.market_cap_rank", comment: ""),
+                value: "#\(coin.marketCapRank ?? 0)"
+            )
+            StatisticRowView(
+                title: NSLocalizedString("detail.statistics.high_24h", comment: ""),
+                value: (coin.high24H ?? 0).toCurrencyString()
+            )
+            StatisticRowView(
+                title: NSLocalizedString("detail.statistics.low_24h", comment: ""),
+                value: (coin.low24H ?? 0).toCurrencyString()
+            )
+            StatisticRowView(
+                title: NSLocalizedString("detail.statistics.total_volume", comment: ""),
+                value: (coin.totalVolume ?? 0).toFormattedString()
+            )
         }
-        .asCard() // Use our custom card modifier
+        .asCard()
     }
     
-    // --- Helper 5: Description Card ---
+    // MARK: - Description Card
     private var descriptionCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("About \(coin.name)")
+
+            Text(String(format: NSLocalizedString("detail.about.title", comment: ""), coin.name))
                 .font(.headline)
             
             Divider()
@@ -162,20 +168,16 @@ extension CoinDetailView {
                     isDescriptionExpanded.toggle()
                 }
             } label: {
-                Text(isDescriptionExpanded ? "Show Less" : "Read More")
-                    .font(.caption.bold())
-                    .foregroundStyle(.blue) // Let's use system blue for links
-                    .padding(.top, 4)
+                Text(isDescriptionExpanded ? "detail.about.show_less" : "detail.about.read_more")
+                .font(.caption.bold())
+                .foregroundStyle(.blue)
+                .padding(.top, 4)
             }
         }
-        .asCard() // Use our custom card modifier
+        .asCard()
     }
 }
 
-// --- 3. A "COZY" ViewModifier FOR OUR CARD STYLE ---
-// (We can move this to a new file in Core/Extensions later)
-
-// This modifier holds our "card" style
 struct CardViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -187,17 +189,14 @@ struct CardViewModifier: ViewModifier {
 }
 
 extension View {
-    // This makes it "cozy" to use
     func asCard() -> some View {
         self.modifier(CardViewModifier())
     }
 }
 
-
-
-// --- Preview ---
 #Preview {
     NavigationStack {
         CoinDetailView(coin: Coin.mock)
     }
 }
+

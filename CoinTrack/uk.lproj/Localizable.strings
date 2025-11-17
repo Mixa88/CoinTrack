@@ -1,0 +1,91 @@
+/* Localizable.strings (Ukrainian) */
+
+//
+// MARK: - General
+//
+"common.retry" = "Спробувати ще";
+"common.search.prompt" = "Пошук за назвою або символом...";
+
+//
+// MARK: - Main Tabs
+//
+"tab.prices" = "Ціни";
+"tab.news" = "Новини";
+
+//
+// MARK: - Prices Tab (CoinList)
+//
+"prices.title" = "Live Ціни";
+"prices.tab.all_coins" = "Всі Монети";
+"prices.tab.portfolio" = "Портфоліо";
+"prices.spotlight.title" = "🔥 Монета Дня";
+"prices.spotlight.dismiss" = "Сховати";
+"prices.empty_portfolio.title" = "Ваше портфоліо порожнє";
+"prices.empty_portfolio.subtitle" = "Натисніть ⭐️ біля монети, щоб додати її сюди.";
+"prices.error.title" = "Щось пішло не так";
+"prices.error.subtitle" = "Операцію не вдалося завершити.";
+"prices.context.add" = "Додати в Портфоліо";
+"prices.context.remove" = "Видалити з Портфоліо";
+
+//
+// MARK: - News Tab
+//
+"news.title" = "Новини";
+"news.error.title" = "Не вдалося завантажити новини";
+"news.disclaimer.line1" = "Розділ 'Новини' відображає матеріали, надані CryptoCompare API.";
+"news.disclaimer.line2" = "CoinTrack не створює та не редагує цей контент.";
+
+//
+// MARK: - Detail View
+//
+"detail.chart.title" = "7-денний Графік";
+"detail.statistics.title" = "Статистика";
+"detail.statistics.market_cap" = "Ринкова Кап.";
+"detail.statistics.market_cap_rank" = "Рейтинг Кап.";
+"detail.statistics.high_24h" = "Максимум (24г)";
+"detail.statistics.low_24h" = "Мінімум (24г)";
+"detail.statistics.total_volume" = "Обсяг (24г)";
+"detail.about.title" = "Про %@";
+"detail.about.no_description" = "Опис відсутній.";
+"detail.about.read_more" = "Читати далі";
+"detail.about.show_less" = "Згорнути";
+
+//
+// MARK: - App Lock
+//
+"lock.title" = "CoinTrack Заблоковано";
+"lock.subtitle" = "Розблокуйте, щоб продовжити.";
+"lock.button" = "Розблокувати";
+"lock.reason" = "Будь ласка, аутентифікуйтесь, щоб розблокувати портфоліо.";
+
+//
+// MARK: - Widget
+//
+"widget.display_name" = "CoinTrack Зведення";
+"widget.description" = "Показує \"живу\" ціну Bitcoin та статистику ринку.";
+"widget.btc" = "Bitcoin (BTC)";
+"detail.statistics.btc_dominance_short" = "Дом. BTC";
+
+//
+// MARK: - Notifications
+//
+"notification.price_alert.title" = "Цінове Cповіщення: %@";
+"notification.price_alert.direction_increased" = "зріс";
+"notification.price_alert.direction_decreased" = "впав";
+"notification.price_alert.body" = "%@ %@ на %@ за 24г!";
+
+//
+// MARK: - Widget Control
+//
+"widget.control.start_timer" = "Почати Таймер";
+"widget.control.on" = "Увімк.";
+"widget.control.off" = "Вимк.";
+"widget.control.timer_name" = "Таймер";
+"widget.control.timer_description" = "Приклад контрол-віджета, що запускає таймер.";
+"widget.control.config.title" = "Налаштування Назви Таймера";
+"widget.control.config.param_name" = "Назва Таймера";
+"widget.control.intent.start_timer.title" = "Запустити таймер";
+"widget.control.intent.param_name" = "Назва Таймера";
+"widget.control.intent.param_running" = "Таймер запущено";
+
+

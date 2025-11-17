@@ -37,6 +37,7 @@ struct NewsView: View {
                             ForEach(viewModel.articles) { article in
                                 
                                 
+                                
                                 newsRow(article: article)
                                     .onTapGesture {
                                         if let url = article.articleURL {
@@ -50,14 +51,15 @@ struct NewsView: View {
                         VStack {
                             Spacer()
                             VStack(spacing: 4) {
-                                Text("News is automatically sourced from the CryptoCompare News API.")
-                                Text("CoinTrack does not create, edit, or verify external content.")
+                                
+                                Text("news.disclaimer.line1")
+                                Text("news.disclaimer.line2")
                             }
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.vertical, 16)
-                            .background(.ultraThinMaterial) // "Затишна" напівпрозора плашка
+                            .background(.ultraThinMaterial)
                         }
                     }
                     .listStyle(.plain)
@@ -67,7 +69,7 @@ struct NewsView: View {
                     }
                 }
                 
-               
+                
             
                 
                 
@@ -76,7 +78,9 @@ struct NewsView: View {
                         Image(systemName: "wifi.slash")
                             .font(.system(size: 36))
                             .foregroundStyle(.gray)
-                        Text("Failed to load news") // TODO: Localize
+                        
+                       
+                        Text("news.error.title")
                             .font(.headline)
                         
                         Text(errorMessage)
@@ -85,7 +89,8 @@ struct NewsView: View {
                             .multilineTextAlignment(.center)
                             .lineLimit(3)
                         
-                        Button("Retry") { // TODO: Localize
+                        
+                        Button("common.retry") {
                             Task { await viewModel.fetchNews() }
                         }
                         .buttonStyle(.bordered)
@@ -98,7 +103,7 @@ struct NewsView: View {
                     .transition(.scale.combined(with: .opacity))
                 }
             }
-            .navigationTitle("News") // TODO: Localize
+            .navigationTitle("news.title")
             
             
             .sheet(item: $selectedArticleURL) { url in
@@ -130,17 +135,17 @@ struct NewsView: View {
                             Text(article.title)
                                 .font(.headline)
                                 .foregroundStyle(.primary)
-                                .lineLimit(2) // <-- 2. "ДОПИЛ" (як радив друг)
+                                .lineLimit(2)
                             
-                            Text(article.source.uppercased())
+                            Text(article.source.uppercased()) 
                                 .font(.caption.bold())
                                 .foregroundStyle(.secondary)
                         }
                     }
                 }
-                .padding(8) // "Затишний" внутрішній відступ
-                .background(Color(.secondarySystemBackground)) // Використовуємо "чистий" колір
-                .cornerRadius(16) 
+                .padding(8)
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(16)
             }
     }
 
@@ -154,7 +159,7 @@ struct SafariView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
-        // Нічого не оновлюємо
+        
     }
 }
 
