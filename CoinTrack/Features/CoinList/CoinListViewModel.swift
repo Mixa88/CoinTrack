@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 import SwiftData
-import UserNotifications 
+import UserNotifications
 
 @MainActor
 class CoinListViewModel: ObservableObject {
@@ -27,11 +27,13 @@ class CoinListViewModel: ObservableObject {
     // --- Data Properties ---
     @Published var globalData: GlobalData?
     @Published var fearGreedData: FearGreedData?
-    @Published var spotlightCoin: Coin? // <-- Ось наша "Монета дня"
+    @Published var spotlightCoin: Coin?
     @Published private var allCoins: [Coin] = []
     @Published private var portfolioCoinIDs: Set<String> = []
     
-    // --- Computed Property (Розумний список) ---
+    @Published var isRetrying = false
+    
+    
     var coins: [Coin] {
         let filteredBySearch = filter(coins: allCoins, with: searchText)
         
@@ -47,14 +49,14 @@ class CoinListViewModel: ObservableObject {
     private let coinDataService = CoinDataService.shared
     private let globalDataService = GlobalDataService.shared
     private let fearGreedService = FearGreedDataService.shared
-    private let spotlightService = SpotlightService() // <-- Ось наш "Сервіс Монети дня"
+    private let spotlightService = SpotlightService()
     private var portfolioService: PortfolioDataService?
     private var cancellables = Set<AnyCancellable>()
 
     // --- Init & Setup ---
     init() {
         Task {
-            await fetchAllData() // Викликаємо "майстер-функцію"
+            await fetchAllData()
         }
         
         setupSearchSubscription()
@@ -62,11 +64,11 @@ class CoinListViewModel: ObservableObject {
     
     
     func setup(modelContext: ModelContext) {
-        // "Вмикаємо" SwiftData, коли View готовий
+        
         guard self.portfolioService == nil else { return }
         let service = PortfolioDataService(modelContext: modelContext)
         self.portfolioService = service
-        subscribeToPortfolio(service: service) // Починаємо "слухати" базу
+        subscribeToPortfolio(service: service)
     }
     
     private func subscribeToPortfolio(service: PortfolioDataService) {
@@ -108,8 +110,9 @@ class CoinListViewModel: ObservableObject {
             print("Successfully refreshed all data.")
             
         } catch {
-            self.errorMessage = error.localizedDescription
-            print("Failed to refresh all data: \(error)")
+            
+            print("Failed to refresh all data: \(error)") // Это для тебя
+            self.errorMessage = NSLocalizedString("prices.error.subtitle", comment: "")
         }
     }
     
@@ -124,6 +127,26 @@ class CoinListViewModel: ObservableObject {
     
     func coinIsInPortfolio(coin: Coin) -> Bool {
         return portfolioCoinIDs.contains(coin.id)
+    }
+    
+
+    @MainActor
+    func retryRefresh() async {
+        
+        isRetrying = true
+        
+        
+        self.isLoading = true
+
+        
+        try? await Task.sleep(nanoseconds: 3_000_000_000)
+
+        
+        await refreshAllData()
+
+        
+        self.isLoading = false
+        isRetrying = false
     }
 
     // --- PRIVATE FUNCTIONS ---
@@ -177,18 +200,18 @@ class CoinListViewModel: ObservableObject {
     private func sendNotification(for coin: Coin, change: Double) {
         let content = UNMutableNotificationContent()
         
-        // 1. Готовим ключи
+        
         let titleFormat = NSLocalizedString("notification.price_alert.title", comment: "Notification title. %@ = coin name")
         let directionKey = change > 0 ? "notification.price_alert.direction_increased" : "notification.price_alert.direction_decreased"
         let direction = NSLocalizedString(directionKey, comment: "Word for 'increased' or 'decreased'")
         let bodyFormat = NSLocalizedString("notification.price_alert.body", comment: "Notification body. 1st %@ = symbol, 2nd %@ = direction, 3rd %@ = percent change")
         
-        // 2. Создаем строки с параметрами
+        
         content.title = String(format: titleFormat, coin.name)
         content.body = String(format: bodyFormat, coin.symbol.uppercased(), direction, change.toPercentString())
         content.sound = .default
         
-        // ... (остальная часть функции не меняется) ...
+        
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: coin.id, content: content, trigger: trigger)
 
